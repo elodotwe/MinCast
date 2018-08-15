@@ -3,7 +3,7 @@ package com.jacobarau.mincast.subscription
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.PrimaryKey
-import java.time.Instant
+import org.threeten.bp.Instant
 
 @Entity(foreignKeys = [ForeignKey(entity = Subscription::class,
         parentColumns = ["url"],
@@ -18,4 +18,8 @@ class Item {
     var enclosureUrl: String? = null
     var enclosureMimeType: String? = null
     var enclosureLengthBytes: Int? = null
+
+    override fun toString(): String {
+        return "Item(id=$id, parentUrl=$parentUrl, title=$title, description=$description, publishDate=$publishDate, enclosureUrl=$enclosureUrl, enclosureMimeType=$enclosureMimeType, enclosureLengthBytes=$enclosureLengthBytes)"
+    }
 }

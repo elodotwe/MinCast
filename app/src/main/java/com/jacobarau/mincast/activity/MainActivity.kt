@@ -1,10 +1,9 @@
-package com.jacobarau.mincast
+package com.jacobarau.mincast.activity
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import com.jacobarau.mincast.R
 import com.jacobarau.mincast.subscription.AppDatabase
 import com.jacobarau.mincast.subscription.ItemDao
 import com.jacobarau.mincast.subscription.Subscription

@@ -3,6 +3,7 @@ package com.jacobarau.mincast.activity
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -38,7 +39,9 @@ class SubscriptionsFragment : Fragment() {
 
         recyclerView = root.findViewById(R.id.recyclerView)
         recyclerView.adapter = viewAdapter
+
         recyclerView.layoutManager = viewManager
+        recyclerView.addItemDecoration(GridSpacing(20))
 
         // Inflate the layout for this fragment
         return root
@@ -76,5 +79,14 @@ class SubscriptionsFragment : Fragment() {
 
         // Return the size of your dataset (invoked by the layout manager)
         override fun getItemCount() = myDataset?.size ?: 0
+    }
+
+    class GridSpacing(private val padding: Int) : RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+            outRect.left = padding / 2
+            outRect.right = padding / 2
+            outRect.top = padding / 2
+            outRect.bottom = padding / 2
+        }
     }
 }

@@ -30,7 +30,7 @@ class SubscriptionsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_subscriptions, container, false)
-        viewManager = GridLayoutManager(activity, 6)
+        viewManager = GridLayoutManager(activity, 3)
         viewAdapter = MyAdapter(model.getSubscriptions().value)
         model.getSubscriptions().observe(this, Observer {
             subscriptions -> viewAdapter.setData(subscriptions)

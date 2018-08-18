@@ -3,6 +3,7 @@ package com.jacobarau.mincast.activity
 import android.arch.lifecycle.Observer
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.jacobarau.mincast.R
 import com.jacobarau.mincast.subscription.AppDatabase
 import com.jacobarau.mincast.subscription.ItemDao
@@ -32,17 +33,25 @@ class MainActivity : AppCompatActivity() {
 
         executor = Executors.newSingleThreadExecutor()
 
-        var subscription: Subscription = Subscription()
-        subscription.url = "http://blah.com"
-        subscription.description = "blah description"
-        subscription.title = "BLAH TITLE"
-        executor!!.execute { subscriptionDao!!.insertSubscription(subscription) }
+        val subList = ArrayList<Subscription>()
 
-        var subscription2 = Subscription()
-        subscription2.title = "title 2"
-        subscription2.url = "Anotherone.com"
-        subscription2.lastUpdated = Instant.now()
-        executor!!.execute { subscriptionDao!!.insertSubscription(subscription2) }
+        for (i in 0..10) {
+            val subscription = Subscription()
+            subscription.url = "http://blah.com$i"
+            subscription.description = "blah description"
+            subscription.title = "${i}BLAH TITLE"
+            subList.add(subscription)
+        }
+
+        executor!!.execute {
+            for (sub in subList) {
+                try {
+                    subscriptionDao!!.insertSubscription(sub)
+                } catch (e: Exception) {
+                    Log.e("MainActivity", "I can't even", e)
+                }
+            }
+        }
 
         val subs = subscriptionDao!!.getSubscriptions()
         subs.observe(this, Observer { t -> if (t != null) {

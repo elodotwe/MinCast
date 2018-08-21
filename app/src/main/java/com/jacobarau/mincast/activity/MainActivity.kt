@@ -4,12 +4,14 @@ import android.arch.lifecycle.Observer
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import com.jacobarau.mincast.R
 import com.jacobarau.mincast.subscription.AppDatabase
 import com.jacobarau.mincast.subscription.ItemDao
 import com.jacobarau.mincast.subscription.Subscription
 import com.jacobarau.mincast.subscription.SubscriptionDao
-import org.threeten.bp.Instant
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -22,6 +24,20 @@ class MainActivity : AppCompatActivity() {
     val TAG = "MainActivity"
 
     var executor: Executor? = null
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item == null) return super.onOptionsItemSelected(item)
+        val id = item.itemId
+        if (id == R.id.action_add_podcast) {
+            Toast.makeText(this, "add podcast", Toast.LENGTH_LONG).show()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +46,8 @@ class MainActivity : AppCompatActivity() {
         db = AppDatabase.getInstance(this)
         subscriptionDao = db!!.subscriptionDao()
         itemDao = db!!.itemDao()
+
+        setSupportActionBar(findViewById(R.id.toolbar))
 
         executor = Executors.newSingleThreadExecutor()
 

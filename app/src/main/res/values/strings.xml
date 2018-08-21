@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MinCast</string>
+    <string name="add_podcast">Add podcast</string>
 </resources>

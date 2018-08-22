@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.jacobarau.mincast.R
 import com.jacobarau.mincast.subscription.AppDatabase
 import com.jacobarau.mincast.subscription.ItemDao
@@ -15,8 +14,7 @@ import com.jacobarau.mincast.subscription.SubscriptionDao
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity(), URLDialogFragment.OnFragmentInteractionListener{
     var db: AppDatabase? = null
     var subscriptionDao: SubscriptionDao? = null
     var itemDao: ItemDao? = null
@@ -33,10 +31,26 @@ class MainActivity : AppCompatActivity() {
         if (item == null) return super.onOptionsItemSelected(item)
         val id = item.itemId
         if (id == R.id.action_add_podcast) {
-            Toast.makeText(this, "add podcast", Toast.LENGTH_LONG).show()
+            promptForURL()
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun promptForURL() {
+        URLDialogFragment.newInstance().show(supportFragmentManager, "podcast_url_prompt")
+    }
+
+    override fun onAddURL(url: String) {
+        val newSub = Subscription()
+        newSub.url = url
+        Executors.newSingleThreadExecutor().execute {
+            try {
+                subscriptionDao!!.insertSubscription(newSub)
+            } catch (e: Exception) {
+                //TODO
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

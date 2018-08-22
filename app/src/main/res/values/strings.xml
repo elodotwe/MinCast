@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">MinCast</string>
     <string name="add_podcast">Add podcast</string>
+    <string name="enter_podcast_url_popup">Enter URL to podcast RSS:</string>
+    <string name="enter_url_hint">Enter URL</string>
+    <string name="add_button">Add</string>
+    <string name="cancel">Cancel</string>
 </resources>

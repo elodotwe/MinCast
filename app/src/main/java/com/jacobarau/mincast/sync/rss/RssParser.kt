@@ -1,18 +1,15 @@
 package com.jacobarau.mincast.sync.rss
 
-import android.text.TextUtils
-import android.util.Log
 import com.jacobarau.mincast.subscription.Item
 import com.jacobarau.mincast.subscription.Subscription
 import java.io.InputStream
 import org.xmlpull.v1.XmlPullParser
 import android.util.Xml
-import org.xmlpull.v1.XmlPullParserException
+import org.threeten.bp.Instant
+import java.lang.NumberFormatException
 
 
 class RssParser {
-    val TAG = "RssParser"
-
     class ParseResult(val subscription: Subscription,
                       val itemList: List<Item>)
 
@@ -33,37 +30,34 @@ class RssParser {
                 XmlPullParser.START_TAG -> depth++
             }
         }
+        parser.next()
     }
 
     private fun skipToTag(name: List<String>, parser: XmlPullParser) : Boolean {
-        Log.i(TAG, "skipToTag(names: " + TextUtils.join(",", name) + ")")
         do {
-            Log.i(TAG, "skipToTag: eventType is " + XmlPullParser.TYPES[parser.eventType])
             if (parser.eventType != XmlPullParser.START_TAG) {
-                Log.i(TAG, "skipToTag: skipping event as it's not a START_TAG")
                 parser.next()
                 continue
             }
 
-            Log.i(TAG, "Considering tag with name " + parser.name)
             if (name.contains(parser.name)) {
-                Log.i(TAG, "Found tag we care about. Returning.")
                 return true
             }
 
             try {
-                Log.i(TAG, "We don't care about this tag; skipping it")
                 skip(parser)
             } catch (e: IllegalStateException) {
-                Log.e(TAG, "skip() was angry", e)
                 return false
             }
-        } while (parser.eventType != XmlPullParser.END_DOCUMENT)
-        Log.i(TAG, "Reached end of document")
+        } while (parser.eventType != XmlPullParser.END_DOCUMENT &&
+                parser.eventType != XmlPullParser.END_TAG)
         return false
     }
 
-    class ParseException(description: String) : Exception(description)
+    class ParseException : Exception {
+        constructor(description: String) : super(description)
+        constructor(description: String, throwable: Throwable) : super(description, throwable)
+    }
 
     /**
      * @throws java.io.IOException if the given input stream fails for some reason
@@ -88,52 +82,93 @@ class RssParser {
             }
             parser.next()
             var title: String? = null
+            var link: String? = null
             var description: String? = null
-            var items = ArrayList<Item>()
+
+            val items = ArrayList<Item>()
             // Tags at this level can be:
             // <title>
             // <link>
             // <description>
             // <image>
             // one or more <item> tags
-            while (skipToTag(listOf("title", "link", "description"/*, "image"*/), parser)) {
+            while (skipToTag(listOf("title", "link", "description"/*, "image"*/, "item"), parser)) {
                 when (parser.name) {
                     "title" -> {
-                        title = getText(parser, "<title>", title)
+                        title = getText(parser, title)
                     }
                     "link" -> {
-                        //TODO: implement me
+                        link = getText(parser, link)
                     }
                     "description" -> {
-                        description = getText(parser, "<description>", description)
+                        description = getText(parser, description)
+                    }
+                    "item" -> {
+                        items.add(parseItem(parser))
                     }
                 }
-                parser.next()
             }
 
-            val subscription = Subscription()
-            if (title == null || description == null) {
+            if (title == null || description == null || link == null) {
                 throw ParseException("Missing a required tag")
             }
 
+            val subscription = Subscription()
             subscription.title = title
             subscription.description = description
+            subscription.link = link
             return ParseResult(subscription, items)
         }
     }
 
-    private fun getText(parser: XmlPullParser, tagName: String, existingValue: String? = null) : String? {
-        Log.i(TAG, "getText(tagName=$tagName, existing value=$existingValue)")
+    private fun parseItem(parser: XmlPullParser) : Item {
+        val item = Item()
+        parser.next()
+        while (skipToTag(listOf("title", "description", "pubDate", "enclosure"), parser)) {
+            when (parser.name) {
+                "title" -> {
+                    item.title = getText(parser, item.title)
+                }
+                "description" -> {
+                    item.description = getText(parser, item.description)
+                }
+                "pubDate" -> {
+                    //TODO: lawl
+                    getText(parser, null)
+                }
+                "enclosure" -> {
+                    try {
+                        item.enclosureLengthBytes = parser.getAttributeValue(null, "length").toInt()
+                    } catch (e: NumberFormatException) {
+                        throw ParseException("enclosure length attribute should be a number but isn't", e)
+                    }
+
+                    item.enclosureMimeType = parser.getAttributeValue(null, "type")
+                    item.enclosureUrl = parser.getAttributeValue(null, "url")
+
+                    if (item.enclosureLengthBytes == null || item.enclosureMimeType == null || item.enclosureUrl == null) {
+                        throw ParseException("missing at least one of the enclosure attributes (length, type, and url are all required)")
+                    }
+                }
+            }
+            parser.next()
+        }
+        return item
+    }
+
+    private fun getText(parser: XmlPullParser, existingValue: String? = null) : String {
+        parser.require(XmlPullParser.START_TAG, null, null)
+
         if (existingValue != null) {
-            throw ParseException("Found duplicate $tagName")
+            throw ParseException("Found duplicate tag, existing value is $existingValue")
         }
         if (parser.next() == XmlPullParser.TEXT) {
             val result = parser.text
-            Log.i(TAG, "Text found was '$result'")
-            parser.nextTag()
+            parser.next() // We expect an END_TAG here.
+            parser.next() // Skip the END_TAG into the next event for the next guy to use.
             return result
         }
-        throw ParseException("$tagName seems not to contain text")
+        throw ParseException("tag seems not to contain text")
     }
 
     /*

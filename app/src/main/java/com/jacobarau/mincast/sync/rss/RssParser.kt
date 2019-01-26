@@ -166,7 +166,7 @@ class RssParser {
             val result = parser.text
             parser.next() // We expect an END_TAG here.
             parser.next() // Skip the END_TAG into the next event for the next guy to use.
-            return result
+            return result.trim()
         }
         throw ParseException("tag seems not to contain text")
     }

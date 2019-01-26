@@ -6,6 +6,8 @@ import java.io.InputStream
 import org.xmlpull.v1.XmlPullParser
 import android.util.Xml
 import org.threeten.bp.Instant
+import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import java.lang.NumberFormatException
 
 
@@ -133,8 +135,7 @@ class RssParser {
                     item.description = getText(parser, item.description)
                 }
                 "pubDate" -> {
-                    //TODO: lawl
-                    getText(parser, null)
+                    item.publishDate = ZonedDateTime.parse(getText(parser, null), DateTimeFormatter.RFC_1123_DATE_TIME).toInstant()
                 }
                 "enclosure" -> {
                     try {

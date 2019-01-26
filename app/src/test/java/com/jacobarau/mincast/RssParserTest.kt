@@ -33,7 +33,7 @@ class RssParserTest {
         assertEquals("audio/mpeg", item0.enclosureMimeType)
         assertEquals("http://feedproxy.google.com/~r/CatholicInASmallTown/~5/Vf35fWSH1t0/CST_463.mp3",
                 item0.enclosureUrl)
-        assertEquals("2018-09-05T01:22:58.000Z", item0.publishDate!!.toString())
+        assertEquals("2018-09-05T01:22:58Z", item0.publishDate!!.toString())
 
         val item1 = result.itemList[1]
         assertEquals("CST #462: Pantless Tubing", item1.title)
@@ -44,6 +44,6 @@ class RssParserTest {
         assertEquals("http://feedproxy.google.com/~r/CatholicInASmallTown/~5/FQxnJ8NUEqc/CST_462.mp3",
                 item1.enclosureUrl)
         //28 Aug 2018 02:11:07
-        assertEquals("2018-08-28T02:11:07.000Z", item1.publishDate!!.toString())
+        assertEquals("2018-08-28T02:11:07Z", item1.publishDate!!.toString())
     }
 }

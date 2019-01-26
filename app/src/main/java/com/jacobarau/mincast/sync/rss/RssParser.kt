@@ -5,21 +5,15 @@ import com.jacobarau.mincast.subscription.Subscription
 import java.io.InputStream
 import org.xmlpull.v1.XmlPullParser
 import android.util.Xml
-import org.threeten.bp.Instant
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.DateTimeParseException
 import java.lang.NumberFormatException
 
 
 class RssParser {
     class ParseResult(val subscription: Subscription,
                       val itemList: List<Item>)
-
-    enum class ResultState {
-        SUCCESS,
-        NETWORK_ERROR,
-        PARSE_ERROR
-    }
 
     private fun skip(parser: XmlPullParser) {
         if (parser.eventType != XmlPullParser.START_TAG) {
@@ -135,7 +129,11 @@ class RssParser {
                     item.description = getText(parser, item.description)
                 }
                 "pubDate" -> {
-                    item.publishDate = ZonedDateTime.parse(getText(parser, null), DateTimeFormatter.RFC_1123_DATE_TIME).toInstant()
+                    try {
+                        item.publishDate = ZonedDateTime.parse(getText(parser, null), DateTimeFormatter.RFC_1123_DATE_TIME).toInstant()
+                    } catch (e: DateTimeParseException) {
+                        throw ParseException("pubDate format isn't RFC_1123 parseable", e)
+                    }
                 }
                 "enclosure" -> {
                     try {
@@ -171,18 +169,4 @@ class RssParser {
         }
         throw ParseException("tag seems not to contain text")
     }
-
-    /*
-    var title: String? = null
-    var link: String? = null
-    var description: String? = null
-    var imageUrl: String? = null
-    var lastUpdated: Instant? = null
-     */
-
-//    private fun parseChannelTag(parser: XmlPullParser) : ParseResult {
-//        parser.require(XmlPullParser.START_TAG, null, "rss")
-//        var subscription = Subscription()
-//        skipToTag(listOf("channel"))
-//    }
 }

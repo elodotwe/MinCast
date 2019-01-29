@@ -1,15 +1,11 @@
 package com.jacobarau.mincast.subscription
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
 import org.threeten.bp.Instant
 
-@Entity
 class Subscription {
     /**
      * URL of the RSS feed associated with this subscription.
      */
-    @PrimaryKey
     var url: String = ""
     /**
      * Title of this subscription, from the RSS feed.

@@ -1,18 +1,11 @@
 package com.jacobarau.mincast.subscription
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.PrimaryKey
 import org.threeten.bp.Instant
 
-@Entity(foreignKeys = [ForeignKey(entity = Subscription::class,
-        parentColumns = ["url"],
-        childColumns = ["parentUrl"])])
 class Item {
     /**
      * Internal database ID for this item. Not tied to any value in the RSS.
      */
-    @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 
     /**

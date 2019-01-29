@@ -80,6 +80,7 @@ class RssParser {
             var title: String? = null
             var link: String? = null
             var description: String? = null
+            var imgUrl: String? = null
 
             val items = ArrayList<Item>()
             // Tags at this level can be:
@@ -88,7 +89,7 @@ class RssParser {
             // <description>
             // <image>
             // one or more <item> tags
-            while (skipToTag(listOf("title", "link", "description"/*, "image"*/, "item"), parser)) {
+            while (skipToTag(listOf("title", "link", "description", "image", "item"), parser)) {
                 when (parser.name) {
                     "title" -> {
                         title = getText(parser, title)
@@ -102,6 +103,9 @@ class RssParser {
                     "item" -> {
                         items.add(parseItem(parser))
                     }
+                    "image" -> {
+                        imgUrl = getImageURL(parser)
+                    }
                 }
             }
 
@@ -113,6 +117,7 @@ class RssParser {
             subscription.title = title
             subscription.description = description
             subscription.link = link
+            subscription.imageUrl = imgUrl
             return ParseResult(subscription, items)
         }
     }
@@ -153,6 +158,26 @@ class RssParser {
             parser.next()
         }
         return item
+    }
+
+    private fun getImageURL(parser: XmlPullParser) : String? {
+        // We start on the <image> tag
+        parser.require(XmlPullParser.START_TAG, null, "image")
+
+        var url: String? = null
+
+        // Index into the image tag--we'll look at its children.
+        parser.next()
+
+        // Calling skipToTag in a while loop like this ensures we'll exhaust all children of <image>.
+        while (skipToTag(listOf("url"), parser)) {
+            url = getText(parser, url)
+        }
+
+        // Index past the </image> node.
+        parser.next()
+
+        return url
     }
 
     private fun getText(parser: XmlPullParser, existingValue: String? = null) : String {

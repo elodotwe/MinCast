@@ -45,5 +45,12 @@ class RssParserTest {
                 item1.enclosureUrl)
         //28 Aug 2018 02:11:07
         assertEquals("2018-08-28T02:11:07Z", item1.publishDate!!.toString())
+
+        assertEquals("A podcast about a Catholic couple raising kids in a small town.\r\n" +
+                "\r\n" +
+                "Faith. Family. Fun...Scandalous.", result.subscription.description)
+        assertEquals("http://static.libsyn.com/p/assets/5/7/5/d/575d037ad15bd062/CST_pic_4.png", result.subscription.imageUrl)
+        assertEquals("http://catholicinasmalltown.libsyn.com", result.subscription.link)
+        assertEquals("Catholic in a Small Town", result.subscription.title)
     }
 }

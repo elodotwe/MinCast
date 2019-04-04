@@ -1,57 +1,67 @@
-package com.jacobarau.mincast.subscription
+package com.jacobarau.mincast.subscription;
 
-import org.threeten.bp.Instant
+import org.threeten.bp.Instant;
 
-class Item {
+public class Item {
     /**
      * Internal database ID for this item. Not tied to any value in the RSS.
      */
-    var id: Int = 0
+    Integer id;
 
     /**
-     * The URL of the Subscription's URL, the URL to the RSS file we fetched.
+     * URL of parent Subscription object.
      */
-    var parentUrl: String = ""
+    String subscriptionUrl;
 
     /**
      * Human-readable title of this item, if present in RSS.
      *
      * Either title or description will be present at a bare minimum.
      */
-    var title: String? = null
+    String title;
 
     /**
      * Human-readable description of this item, if present in RSS.
      *
      * Either title or description will be present at a bare minimum.
      */
-    var description: String? = null
+    String description;
 
     /**
      * Date-timestamp of when this item was published; null if not present in the RSS
      */
-    var publishDate: Instant? = null
+    Instant publishDate;
 
     /**
      * If present in the RSS, the URL to the enclosure (typically the podcast audio goes here)
      */
-    var enclosureUrl: String? = null
+    String enclosureUrl;
 
     /**
      * MIME type of the enclosure.
      *
      * If enclosure URL is not null, this will be not null as well.
      */
-    var enclosureMimeType: String? = null
+    String enclosureMimeType;
 
     /**
      * Length in bytes of the enclosure.
      *
      * If enclosure URL is not null, this will be not null as well.
      */
-    var enclosureLengthBytes: Int? = null
+    Integer enclosureLengthBytes;
 
-    override fun toString(): String {
-        return "Item(id=$id, parentUrl=$parentUrl, title=$title, description=$description, publishDate=$publishDate, enclosureUrl=$enclosureUrl, enclosureMimeType=$enclosureMimeType, enclosureLengthBytes=$enclosureLengthBytes)"
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", subscriptionUrl='" + subscriptionUrl + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", publishDate=" + publishDate +
+                ", enclosureUrl='" + enclosureUrl + '\'' +
+                ", enclosureMimeType='" + enclosureMimeType + '\'' +
+                ", enclosureLengthBytes=" + enclosureLengthBytes +
+                '}';
     }
 }

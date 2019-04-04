@@ -1,6 +1,6 @@
 package com.jacobarau.mincast
 
-import com.jacobarau.mincast.sync.rss.RssParser
+import com.jacobarau.mincast.sync.rss.RssParserKotlin
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -12,7 +12,7 @@ import org.junit.Before
 
 
 @RunWith(RobolectricTestRunner::class)
-class RssParserTest {
+class RssParserKotlinTest {
     @Before
     fun setUp() {
         ShadowLog.stream = System.out
@@ -21,7 +21,7 @@ class RssParserTest {
 
     @Test
     fun parseValidRSS() {
-        val parser = RssParser()
+        val parser = RssParserKotlin()
         val istream = this.javaClass::class.java.getResourceAsStream("/cst.xml")
         val result = parser.parseRSS(istream!!)
         assertEquals(2, result.itemList.size)

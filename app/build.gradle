@@ -14,10 +14,10 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
     signingConfigs {
         release {
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
+            storeFile file('/Users/jacobrau/password_is_password')
+            storePassword 'password'
+            keyAlias 'key0'
+            keyPassword 'password'
         }
     }
     compileSdkVersion 28
@@ -53,9 +53,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
     // Test helpers
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
-
-    testImplementation "org.robolectric:robolectric:4.0-alpha-3"
+    testImplementation 'org.robolectric:robolectric:4.0-alpha-3'
 }

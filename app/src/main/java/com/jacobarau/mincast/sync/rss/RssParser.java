@@ -45,6 +45,8 @@ public class RssParser {
                     default:
                         skipTag(parser);
                 }
+            } else {
+                parser.next();
             }
         } while (parser.getEventType() != XmlPullParser.END_DOCUMENT &&
                  parser.getEventType() != XmlPullParser.END_TAG);

@@ -6,50 +6,50 @@ public class Item {
     /**
      * Internal database ID for this item. Not tied to any value in the RSS.
      */
-    Integer id;
+    private Integer id;
 
     /**
      * URL of parent Subscription object.
      */
-    String subscriptionUrl;
+    private String subscriptionUrl;
 
     /**
      * Human-readable title of this item, if present in RSS.
      *
      * Either title or description will be present at a bare minimum.
      */
-    String title;
+    private String title;
 
     /**
      * Human-readable description of this item, if present in RSS.
      *
      * Either title or description will be present at a bare minimum.
      */
-    String description;
+    private String description;
 
     /**
      * Date-timestamp of when this item was published; null if not present in the RSS
      */
-    Instant publishDate;
+    private Instant publishDate;
 
     /**
      * If present in the RSS, the URL to the enclosure (typically the podcast audio goes here)
      */
-    String enclosureUrl;
+    private String enclosureUrl;
 
     /**
      * MIME type of the enclosure.
      *
      * If enclosure URL is not null, this will be not null as well.
      */
-    String enclosureMimeType;
+    private String enclosureMimeType;
 
     /**
      * Length in bytes of the enclosure.
      *
      * If enclosure URL is not null, this will be not null as well.
      */
-    Integer enclosureLengthBytes;
+    private Integer enclosureLengthBytes;
 
     @Override
     public String toString() {
@@ -63,5 +63,37 @@ public class Item {
                 ", enclosureMimeType='" + enclosureMimeType + '\'' +
                 ", enclosureLengthBytes=" + enclosureLengthBytes +
                 '}';
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getSubscriptionUrl() {
+        return subscriptionUrl;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Instant getPublishDate() {
+        return publishDate;
+    }
+
+    public String getEnclosureUrl() {
+        return enclosureUrl;
+    }
+
+    public String getEnclosureMimeType() {
+        return enclosureMimeType;
+    }
+
+    public Integer getEnclosureLengthBytes() {
+        return enclosureLengthBytes;
     }
 }

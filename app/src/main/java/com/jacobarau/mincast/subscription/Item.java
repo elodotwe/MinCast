@@ -96,4 +96,36 @@ public class Item {
     public Integer getEnclosureLengthBytes() {
         return enclosureLengthBytes;
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setSubscriptionUrl(String subscriptionUrl) {
+        this.subscriptionUrl = subscriptionUrl;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPublishDate(Instant publishDate) {
+        this.publishDate = publishDate;
+    }
+
+    public void setEnclosureUrl(String enclosureUrl) {
+        this.enclosureUrl = enclosureUrl;
+    }
+
+    public void setEnclosureMimeType(String enclosureMimeType) {
+        this.enclosureMimeType = enclosureMimeType;
+    }
+
+    public void setEnclosureLengthBytes(Integer enclosureLengthBytes) {
+        this.enclosureLengthBytes = enclosureLengthBytes;
+    }
 }

@@ -2,6 +2,7 @@ package com.jacobarau.mincast.sync.rss;
 
 import android.util.Xml;
 
+import com.jacobarau.mincast.subscription.Item;
 import com.jacobarau.mincast.subscription.Subscription;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -9,12 +10,14 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class RssParser {
     public ParseResult parseRSS(InputStream inputStream, String encoding) throws XmlPullParserException, IOException, ParseException {
         ParseResult result = new ParseResult();
         Subscription subscription = new Subscription();
         result.subscription = subscription;
+        result.items = new ArrayList<>();
         XmlPullParser parser = Xml.newPullParser();
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
         parser.setInput(inputStream, encoding);
@@ -40,7 +43,7 @@ public class RssParser {
                         skipTag(parser);
                         break;
                     case "item":
-                        skipTag(parser);
+                        result.items.add(processItem(parser));
                         break;
                     default:
                         skipTag(parser);
@@ -110,6 +113,50 @@ public class RssParser {
         }
         String result = parser.getText();
         skipTag(parser);
-        return result;
+        return result.trim();
+    }
+
+    private Item processItem(XmlPullParser parser) throws XmlPullParserException, IOException {
+        if (parser.getEventType() != XmlPullParser.START_TAG) {
+            throw new IllegalStateException();
+        }
+        parser.next();
+
+        Item item = new Item();
+
+        do {
+            if (parser.getEventType() == XmlPullParser.START_TAG) {
+                switch (parser.getName()) {
+                    case "title":
+                        item.setTitle(processTextTag(parser));
+                        break;
+                    case "description":
+                        item.setDescription(processTextTag(parser));
+                        break;
+                    case "enclosure":
+                        String length = parser.getAttributeValue(null, "length");
+                        if (length != null) {
+                            item.setEnclosureLengthBytes(Integer.parseInt(length));
+                        }
+
+                        item.setEnclosureUrl(parser.getAttributeValue(null, "url"));
+
+                        item.setEnclosureMimeType(parser.getAttributeValue(null, "type"));
+
+                        skipTag(parser);
+                        break;
+                    case "pubDate":
+                        skipTag(parser);
+                        break;
+                    default:
+                        skipTag(parser);
+                }
+            } else {
+                parser.next();
+            }
+        } while (parser.getEventType() != XmlPullParser.END_DOCUMENT &&
+                parser.getEventType() != XmlPullParser.END_TAG);
+        parser.next();
+        return item;
     }
 }

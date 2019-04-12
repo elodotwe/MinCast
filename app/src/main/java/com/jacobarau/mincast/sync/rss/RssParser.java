@@ -43,7 +43,7 @@ public class RssParser {
                         subscription.setDescription(processTextTag(parser));
                         break;
                     case "image":
-                        skipTag(parser);
+                        processImageTag(parser, subscription);
                         break;
                     case "item":
                         result.items.add(processItem(parser));
@@ -166,5 +166,28 @@ public class RssParser {
                 parser.getEventType() != XmlPullParser.END_TAG);
         parser.next();
         return item;
+    }
+
+    private void processImageTag(XmlPullParser parser, Subscription subscription) throws XmlPullParserException, IOException {
+        if (parser.getEventType() != XmlPullParser.START_TAG) {
+            throw new IllegalStateException();
+        }
+        parser.next();
+
+        do {
+            if (parser.getEventType() == XmlPullParser.START_TAG) {
+                switch (parser.getName()) {
+                    case "url":
+                        subscription.setImageUrl(processTextTag(parser));
+                        break;
+                    default:
+                        skipTag(parser);
+                }
+            } else {
+                parser.next();
+            }
+        } while (parser.getEventType() != XmlPullParser.END_DOCUMENT &&
+                parser.getEventType() != XmlPullParser.END_TAG);
+        parser.next();
     }
 }

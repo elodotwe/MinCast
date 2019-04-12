@@ -5,6 +5,9 @@ import android.util.Xml;
 import com.jacobarau.mincast.subscription.Item;
 import com.jacobarau.mincast.subscription.Subscription;
 
+import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.format.DateTimeParseException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -146,7 +149,12 @@ public class RssParser {
                         skipTag(parser);
                         break;
                     case "pubDate":
-                        skipTag(parser);
+                        String dateStr = processTextTag(parser);
+                        try {
+                            item.setPublishDate(ZonedDateTime.parse(dateStr, DateTimeFormatter.RFC_1123_DATE_TIME).toInstant());
+                        } catch (DateTimeParseException e) {
+                            item.setPublishDate(null);
+                        }
                         break;
                     default:
                         skipTag(parser);

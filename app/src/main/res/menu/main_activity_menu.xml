@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/refresh_podcasts"
+        android:icon="@drawable/ic_refresh"
+        android:showAsAction="ifRoom"
+        android:title="Refresh Podcasts" />
+    <item
+        android:id="@+id/add_podcast"
+        android:icon="@drawable/ic_add"
+        android:showAsAction="ifRoom"
+        android:title="Add Podcast" />
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_settings"
+        android:showAsAction="ifRoom"
+        android:title="Settings" />
+</menu>

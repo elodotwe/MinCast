@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.MainActivity">
+    android:padding="@dimen/podcast_list_vertical_padding">
 
-    <ListView
-        android:id="@+id/podcasts_listview"
+    <TextView
+        android:id="@+id/podcast_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:text="Podcast title"
+        android:textAppearance="@android:style/TextAppearance.Holo.Large" />
 </LinearLayout>

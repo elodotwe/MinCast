@@ -14,7 +14,6 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.jacobarau.mincast.PodcastAppModel;
 import com.jacobarau.mincast.R;
 import com.jacobarau.mincast.subscription.Subscription;
 
@@ -22,7 +21,6 @@ import java.util.List;
 
 public class MainActivity extends Activity implements MainView {
     private final String TAG = "MainActivity";
-    private MainPresenter presenter;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -48,7 +46,7 @@ public class MainActivity extends Activity implements MainView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        presenter = new MainPresenter(this, new PodcastAppModel(getApplicationContext()));
+//        presenter = new MainPresenter(this, new PodcastAppModel(getApplicationContext()));
     }
 
     @Override

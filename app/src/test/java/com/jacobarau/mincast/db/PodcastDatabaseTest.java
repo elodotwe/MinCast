@@ -1,6 +1,5 @@
 package com.jacobarau.mincast.db;
 
-import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.jacobarau.mincast.subscription.Subscription;

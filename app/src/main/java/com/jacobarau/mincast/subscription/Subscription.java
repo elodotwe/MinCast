@@ -2,8 +2,6 @@ package com.jacobarau.mincast.subscription;
 
 import org.threeten.bp.Instant;
 
-import java.util.Objects;
-
 public class Subscription {
     /**
      * URL of the RSS feed associated with this subscription.
@@ -39,6 +37,7 @@ public class Subscription {
      */
     private Instant lastUpdated;
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public String toString() {
         return "Subscription{" +
@@ -103,17 +102,27 @@ public class Subscription {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Subscription that = (Subscription) o;
-        return Objects.equals(url, that.url) &&
-                Objects.equals(title, that.title) &&
-                Objects.equals(link, that.link) &&
-                Objects.equals(description, that.description) &&
-                Objects.equals(imageUrl, that.imageUrl) &&
-                Objects.equals(lastUpdated, that.lastUpdated);
+
+        if (url != null ? !url.equals(that.url) : that.url != null) return false;
+        if (title != null ? !title.equals(that.title) : that.title != null) return false;
+        if (link != null ? !link.equals(that.link) : that.link != null) return false;
+        if (description != null ? !description.equals(that.description) : that.description != null)
+            return false;
+        if (imageUrl != null ? !imageUrl.equals(that.imageUrl) : that.imageUrl != null)
+            return false;
+        return lastUpdated != null ? lastUpdated.equals(that.lastUpdated) : that.lastUpdated == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(url, title, link, description, imageUrl, lastUpdated);
+        int result = url != null ? url.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (link != null ? link.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (imageUrl != null ? imageUrl.hashCode() : 0);
+        result = 31 * result + (lastUpdated != null ? lastUpdated.hashCode() : 0);
+        return result;
     }
 }

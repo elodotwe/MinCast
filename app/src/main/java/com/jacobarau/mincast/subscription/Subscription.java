@@ -2,6 +2,8 @@ package com.jacobarau.mincast.subscription;
 
 import org.threeten.bp.Instant;
 
+import java.util.Objects;
+
 public class Subscription {
     /**
      * URL of the RSS feed associated with this subscription.
@@ -95,5 +97,23 @@ public class Subscription {
 
     public void setLastUpdated(Instant lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Subscription that = (Subscription) o;
+        return Objects.equals(url, that.url) &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(link, that.link) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(imageUrl, that.imageUrl) &&
+                Objects.equals(lastUpdated, that.lastUpdated);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(url, title, link, description, imageUrl, lastUpdated);
     }
 }

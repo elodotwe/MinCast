@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface MainView {
     void onSubscriptionListChanged(List<Subscription> subscriptions);
+    void showAddPodcastDialog();
 }

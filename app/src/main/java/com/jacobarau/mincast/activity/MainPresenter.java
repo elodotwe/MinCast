@@ -32,4 +32,8 @@ public class MainPresenter {
     public void onStop() {
         podcastModel.deleteSubscriptionObserver(subscriptionObserver);
     }
+
+    public void onAddPodcastSelected() {
+        mainView.showAddPodcastDialog();
+    }
 }

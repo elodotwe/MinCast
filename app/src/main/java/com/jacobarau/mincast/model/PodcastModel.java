@@ -3,6 +3,8 @@ package com.jacobarau.mincast.model;
 import com.jacobarau.mincast.db.PodcastDatabase;
 import com.jacobarau.mincast.subscription.Subscription;
 
+import org.threeten.bp.Instant;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -50,5 +52,12 @@ public class PodcastModel {
      */
     public void deleteSubscriptionObserver(Observer subscriptionObserver) {
         subscriptionsObservable.deleteObserver(subscriptionObserver);
+    }
+
+    public void subscribeTo(String url) {
+        Subscription subscription = new Subscription();
+        subscription.setUrl(url);
+        subscription.setLastUpdated(Instant.now());
+        podcastDatabase.addSubscription(subscription);
     }
 }

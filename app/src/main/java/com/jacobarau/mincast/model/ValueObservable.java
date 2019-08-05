@@ -21,6 +21,9 @@ public class ValueObservable<T> extends Observable {
     @Override
     public synchronized void addObserver(Observer o) {
         super.addObserver(o);
+        if (currentValue == null) {
+            return;
+        }
         onValueChanged(currentValue);
     }
 }

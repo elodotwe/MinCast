@@ -36,7 +36,7 @@ public class MainActivity extends Activity implements MainView {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.add_podcast) {
-            Log.i(TAG, "onOptionsItemSelected: Add podcast selected");
+            presenter.onAddPodcastSelected();
         }
 //        if (id == R.id.action_add_podcast) {
 //
@@ -94,5 +94,10 @@ public class MainActivity extends Activity implements MainView {
                 return convertView;
             }
         });
+    }
+
+    public void showAddPodcastDialog() {
+        AddPodcastDialogFragment fragment = new AddPodcastDialogFragment();
+        fragment.show(getFragmentManager(), "addPodcast");
     }
 }

@@ -58,6 +58,7 @@ public class PodcastModel {
         Subscription subscription = new Subscription();
         subscription.setUrl(url);
         subscription.setLastUpdated(Instant.now());
+        subscription.setTitle(url);
         podcastDatabase.addSubscription(subscription);
     }
 }

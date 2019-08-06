@@ -22,6 +22,7 @@ public class PodcastDatabase {
 
     public PodcastDatabase(SQLiteDatabase database) {
         this.database = database;
+        onSubscriptionsChanged();
     }
 
     public void addSubscriptionsObserver(Observer observer) {

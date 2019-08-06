@@ -39,9 +39,16 @@ public class PodcastDatabase {
         onSubscriptionsChanged();
     }
 
+    public void deleteSubscription(Subscription subscription) {
+        int affected = database.delete(Subscriptions.TABLE_NAME, Subscriptions.COLUMN_NAME_URL + " = ?", new String[] {subscription.getUrl()});
+        if (affected > 0) {
+            onSubscriptionsChanged();
+        }
+    }
+
     public void updateSubscription(Subscription subscription) {
         int affected = database.update(Subscriptions.TABLE_NAME, subscriptionToValues(subscription),
-                "? = ?", new String[]{Subscriptions.COLUMN_NAME_URL, subscription.getUrl()});
+                Subscriptions.COLUMN_NAME_URL + " = ?", new String[]{subscription.getUrl()});
         if (affected > 0) {
             onSubscriptionsChanged();
         }

@@ -61,4 +61,14 @@ public class PodcastModel {
         subscription.setTitle(url);
         podcastDatabase.addSubscription(subscription);
     }
+
+    public void unsubscribeFrom(Subscription subscription) {
+        podcastDatabase.deleteSubscription(subscription);
+    }
+
+    public void unsubscribeFrom(List<Subscription> subscriptions) {
+        for (Subscription subscription : subscriptions) {
+            unsubscribeFrom(subscription);
+        }
+    }
 }

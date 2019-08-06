@@ -7,4 +7,5 @@
     <string name="cancel">Cancel</string>
     <string name="add_podcast_description_text">Specify podcast feed URL (RSS):</string>
     <string name="podcast_url_hint">example.com/rss</string>
+    <string name="unsubscribe">Unsubscribe</string>
 </resources>

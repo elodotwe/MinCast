@@ -36,4 +36,8 @@ public class MainPresenter {
     public void onAddPodcastSelected() {
         mainView.showAddPodcastDialog();
     }
+
+    void onUnsubscribe(List<Subscription> subscriptions) {
+        podcastModel.unsubscribeFrom(subscriptions);
+    }
 }

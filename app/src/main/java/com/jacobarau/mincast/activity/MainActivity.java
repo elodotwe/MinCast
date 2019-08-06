@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,11 +22,13 @@ import com.jacobarau.mincast.db.PodcastDatabaseFactory;
 import com.jacobarau.mincast.model.PodcastModel;
 import com.jacobarau.mincast.subscription.Subscription;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends Activity implements MainView {
     private final String TAG = "MainActivity";
     private MainPresenter presenter;
+    private ListView listView;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,6 +55,50 @@ public class MainActivity extends Activity implements MainView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         presenter = new MainPresenter(this, new PodcastModel(PodcastDatabaseFactory.getPodcastDatabase(getApplicationContext())));
+        listView = findViewById(R.id.podcasts_listview);
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.main_activity_context, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.unsubscribe:
+                        SparseBooleanArray positions = listView.getCheckedItemPositions();
+                        List<Subscription> toDelete = new ArrayList<>(positions.size());
+                        for (int i = 0; i < positions.size(); i++) {
+                            if (positions.valueAt(i)) {
+                                toDelete.add((Subscription)listView.getItemAtPosition(positions.keyAt(i)));
+                            }
+                        }
+                        presenter.onUnsubscribe(toDelete);
+                        mode.finish(); // Action picked, so close the CAB
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+
+            }
+        });
     }
 
     @Override
@@ -66,7 +115,6 @@ public class MainActivity extends Activity implements MainView {
 
     @Override
     public void onSubscriptionListChanged(final List<Subscription> subscriptions) {
-        ListView listView = findViewById(R.id.podcasts_listview);
         listView.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {

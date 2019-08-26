@@ -11,8 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.jacobarau.mincast.R;
-import com.jacobarau.mincast.db.PodcastDatabaseFactory;
-import com.jacobarau.mincast.model.PodcastModel;
+import com.jacobarau.mincast.model.PodcastModelFactory;
 
 public class AddPodcastDialogFragment extends DialogFragment implements AddPodcastDialogView {
     private AddPodcastDialogPresenter presenter;
@@ -22,7 +21,7 @@ public class AddPodcastDialogFragment extends DialogFragment implements AddPodca
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        presenter = new AddPodcastDialogPresenter(new PodcastModel(PodcastDatabaseFactory.getPodcastDatabase(context.getApplicationContext())), this);
+        presenter = new AddPodcastDialogPresenter(PodcastModelFactory.getPodcastModel(context.getApplicationContext()), this);
     }
 
     @Override

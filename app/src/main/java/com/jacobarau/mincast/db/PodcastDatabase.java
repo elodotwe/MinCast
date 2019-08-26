@@ -4,57 +4,36 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.jacobarau.mincast.model.ValueObservable;
 import com.jacobarau.mincast.subscription.Subscription;
 
 import org.threeten.bp.Instant;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observer;
 
 import static com.jacobarau.mincast.db.PodcastDatabaseContract.Subscriptions;
 
 public class PodcastDatabase {
     private SQLiteDatabase database;
-    private ValueObservable<List<Subscription>> subscriptionsObservable = new ValueObservable<>();
-    private List<Subscription> subscriptions = new ArrayList<>();
 
     public PodcastDatabase(SQLiteDatabase database) {
         this.database = database;
-        onSubscriptionsChanged();
-    }
-
-    public void addSubscriptionsObserver(Observer observer) {
-        subscriptionsObservable.addObserver(observer);
-        observer.update(subscriptionsObservable, subscriptions);
-    }
-
-    public void deleteSubscriptionsObserver(Observer observer) {
-        subscriptionsObservable.deleteObserver(observer);
     }
 
     public void addSubscription(Subscription subscription) {
         database.insertOrThrow(Subscriptions.TABLE_NAME, null, subscriptionToValues(subscription));
-        onSubscriptionsChanged();
     }
 
     public void deleteSubscription(Subscription subscription) {
-        int affected = database.delete(Subscriptions.TABLE_NAME, Subscriptions.COLUMN_NAME_URL + " = ?", new String[] {subscription.getUrl()});
-        if (affected > 0) {
-            onSubscriptionsChanged();
-        }
+        database.delete(Subscriptions.TABLE_NAME, Subscriptions.COLUMN_NAME_URL + " = ?", new String[]{subscription.getUrl()});
     }
 
     public void updateSubscription(Subscription subscription) {
-        int affected = database.update(Subscriptions.TABLE_NAME, subscriptionToValues(subscription),
+        database.update(Subscriptions.TABLE_NAME, subscriptionToValues(subscription),
                 Subscriptions.COLUMN_NAME_URL + " = ?", new String[]{subscription.getUrl()});
-        if (affected > 0) {
-            onSubscriptionsChanged();
-        }
     }
 
-    private void onSubscriptionsChanged() {
+    public List<Subscription> getSubscriptions() {
         Cursor cursor = database.query(Subscriptions.TABLE_NAME,
                 new String[]{
                         Subscriptions.COLUMN_NAME_URL,
@@ -77,8 +56,7 @@ public class PodcastDatabase {
             subscriptions.add(subscription);
         }
         cursor.close();
-        this.subscriptions = subscriptions;
-        subscriptionsObservable.onValueChanged(subscriptions);
+        return subscriptions;
     }
 
     private ContentValues subscriptionToValues(Subscription subscription) {

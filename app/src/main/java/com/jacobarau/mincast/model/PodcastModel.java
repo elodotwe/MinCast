@@ -1,30 +1,45 @@
 package com.jacobarau.mincast.model;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+
 import com.jacobarau.mincast.db.PodcastDatabase;
 import com.jacobarau.mincast.subscription.Subscription;
 
 import org.threeten.bp.Instant;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class PodcastModel {
     private final PodcastDatabase podcastDatabase;
 
     private final ValueObservable<List<Subscription>> subscriptionsObservable;
 
-    public PodcastModel(PodcastDatabase podcastDatabase) {
-        subscriptionsObservable = new ValueObservable<>();
-        //TODO: Also shit. Don't broadcast a null on startup. There's a better way to do this.
-        subscriptionsObservable.onValueChanged(new ArrayList<Subscription>());
+    private Executor dbExecutor = Executors.newCachedThreadPool();
+    private Handler mainHandler = new Handler(Looper.getMainLooper());
 
+
+    PodcastModel(final PodcastDatabase podcastDatabase) {
+        subscriptionsObservable = new ValueObservable<>();
         this.podcastDatabase = podcastDatabase;
-        podcastDatabase.addSubscriptionsObserver(new Observer() {
+        updateSubscriptionList();
+    }
+
+    private void updateSubscriptionList() {
+        dbExecutor.execute(new Runnable() {
             @Override
-            public void update(Observable o, Object arg) {
-                subscriptionsObservable.onValueChanged((List<Subscription>) arg);
+            public void run() {
+                final List<Subscription> subscriptions = podcastDatabase.getSubscriptions();
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        subscriptionsObservable.onValueChanged(subscriptions);
+                    }
+                });
             }
         });
     }
@@ -55,15 +70,28 @@ public class PodcastModel {
     }
 
     public void subscribeTo(String url) {
-        Subscription subscription = new Subscription();
+        final Subscription subscription = new Subscription();
         subscription.setUrl(url);
         subscription.setLastUpdated(Instant.now());
         subscription.setTitle(url);
-        podcastDatabase.addSubscription(subscription);
+
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                podcastDatabase.addSubscription(subscription);
+                updateSubscriptionList();
+            }
+        });
     }
 
-    public void unsubscribeFrom(Subscription subscription) {
-        podcastDatabase.deleteSubscription(subscription);
+    public void unsubscribeFrom(final Subscription subscription) {
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                podcastDatabase.deleteSubscription(subscription);
+                updateSubscriptionList();
+            }
+        });
     }
 
     public void unsubscribeFrom(List<Subscription> subscriptions) {

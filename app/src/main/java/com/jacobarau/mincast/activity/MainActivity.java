@@ -2,8 +2,6 @@ package com.jacobarau.mincast.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -18,15 +16,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jacobarau.mincast.R;
-import com.jacobarau.mincast.db.PodcastDatabaseFactory;
-import com.jacobarau.mincast.model.PodcastModel;
+import com.jacobarau.mincast.model.PodcastModelFactory;
 import com.jacobarau.mincast.subscription.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends Activity implements MainView {
-    private final String TAG = "MainActivity";
     private MainPresenter presenter;
     private ListView listView;
 
@@ -54,7 +50,7 @@ public class MainActivity extends Activity implements MainView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        presenter = new MainPresenter(this, new PodcastModel(PodcastDatabaseFactory.getPodcastDatabase(getApplicationContext())));
+        presenter = new MainPresenter(this, PodcastModelFactory.getPodcastModel(getApplicationContext()));
         listView = findViewById(R.id.podcasts_listview);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {

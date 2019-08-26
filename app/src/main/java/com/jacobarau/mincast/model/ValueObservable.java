@@ -5,25 +5,42 @@ import java.util.Observer;
 
 public class ValueObservable<T> extends Observable {
     private T currentValue = null;
+    private final Object observerLock = new Object();
 
-    public synchronized void onValueChanged(T newValue) {
-        setChanged();
-        notifyObservers(newValue);
-        currentValue = newValue;
+    public void onValueChanged(T newValue) {
+        synchronized (observerLock) {
+            setChanged();
+            notifyObservers(newValue);
+            currentValue = newValue;
+        }
     }
 
     /**
      * Add the given observer and immediately notify all observers of the current value.
      *
      * Meant for use with UI data binding.
+     *
+     * Note that the Observer may be called after {@link ValueObservable#deleteObserver(Observer)}
+     * is called--it is the responsibility of the Observer to not crash if it does receive such
+     * spurious calls.
+     *
      * @param o The observer that will be watching this observable
      */
     @Override
-    public synchronized void addObserver(Observer o) {
-        super.addObserver(o);
-        if (currentValue == null) {
-            return;
+    public void addObserver(Observer o) {
+        synchronized (observerLock) {
+            super.addObserver(o);
+            if (currentValue == null) {
+                return;
+            }
+            onValueChanged(currentValue);
         }
-        onValueChanged(currentValue);
+    }
+
+    @Override
+    public void deleteObserver(Observer o) {
+        synchronized (observerLock) {
+            super.deleteObserver(o);
+        }
     }
 }

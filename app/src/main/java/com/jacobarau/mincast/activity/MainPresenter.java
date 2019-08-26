@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MainPresenter {
+class MainPresenter {
     private final MainView mainView;
     private final PodcastModel podcastModel;
     private final Observer subscriptionObserver;
 
-    public MainPresenter(final MainView mainView, PodcastModel podcastModel) {
+    MainPresenter(final MainView mainView, PodcastModel podcastModel) {
         this.mainView = mainView;
         this.podcastModel = podcastModel;
 
@@ -25,15 +25,15 @@ public class MainPresenter {
         };
     }
 
-    public void onStart() {
+    void onStart() {
         podcastModel.observeSubscriptions(subscriptionObserver);
     }
 
-    public void onStop() {
+    void onStop() {
         podcastModel.deleteSubscriptionObserver(subscriptionObserver);
     }
 
-    public void onAddPodcastSelected() {
+    void onAddPodcastSelected() {
         mainView.showAddPodcastDialog();
     }
 

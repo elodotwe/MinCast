@@ -40,4 +40,8 @@ class MainPresenter {
     void onUnsubscribe(List<Subscription> subscriptions) {
         podcastModel.unsubscribeFrom(subscriptions);
     }
+
+    void onUpdatePodcastsSelected() {
+        podcastModel.startUpdate();
+    }
 }

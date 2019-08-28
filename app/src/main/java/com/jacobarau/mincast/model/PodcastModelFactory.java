@@ -17,7 +17,7 @@ public class PodcastModelFactory {
         PodcastDatabaseHelper helper = new PodcastDatabaseHelper(applicationContext);
         SQLiteDatabase database = helper.getWritableDatabase();
         PodcastDatabase podcastDatabase = new PodcastDatabase(database);
-        podcastModel = new PodcastModel(podcastDatabase);
+        podcastModel = new PodcastModel(podcastDatabase, applicationContext);
         return podcastModel;
     }
 }

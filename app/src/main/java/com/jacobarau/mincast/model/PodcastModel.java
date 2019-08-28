@@ -1,10 +1,13 @@
 package com.jacobarau.mincast.model;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.jacobarau.mincast.db.PodcastDatabase;
+import com.jacobarau.mincast.service.UpdateService;
 import com.jacobarau.mincast.subscription.Subscription;
 
 import org.threeten.bp.Instant;
@@ -21,11 +24,12 @@ public class PodcastModel {
 
     private Executor dbExecutor = Executors.newCachedThreadPool();
     private Handler mainHandler = new Handler(Looper.getMainLooper());
+    private final Context appContext;
 
-
-    PodcastModel(final PodcastDatabase podcastDatabase) {
+    PodcastModel(final PodcastDatabase podcastDatabase, Context appContext) {
         subscriptionsObservable = new ValueObservable<>();
         this.podcastDatabase = podcastDatabase;
+        this.appContext = appContext;
         updateSubscriptionList();
     }
 
@@ -97,6 +101,14 @@ public class PodcastModel {
     public void unsubscribeFrom(List<Subscription> subscriptions) {
         for (Subscription subscription : subscriptions) {
             unsubscribeFrom(subscription);
+        }
+    }
+
+    public void startUpdate() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            appContext.startForegroundService(new Intent(appContext, UpdateService.class));
+        } else {
+            appContext.startService(new Intent(appContext, UpdateService.class));
         }
     }
 }

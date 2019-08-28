@@ -36,14 +36,19 @@ public class MainActivity extends Activity implements MainView {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.add_podcast) {
-            presenter.onAddPodcastSelected();
+
+        switch (id) {
+            case R.id.add_podcast:
+                presenter.onAddPodcastSelected();
+                break;
+            case R.id.update_podcasts:
+                presenter.onUpdatePodcastsSelected();
+                break;
+            default:
+                return false;
         }
-//        if (id == R.id.action_add_podcast) {
-//
-//            return true
-//        }
-        return super.onOptionsItemSelected(item);
+
+        return true;
     }
 
     @Override

@@ -2,11 +2,13 @@ package com.jacobarau.mincast.model;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 
 import com.jacobarau.mincast.db.PodcastDatabase;
+import com.jacobarau.mincast.db.PodcastDatabaseHelper;
 import com.jacobarau.mincast.service.UpdateService;
 import com.jacobarau.mincast.subscription.Subscription;
 
@@ -18,17 +20,25 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class PodcastModel {
-    private final PodcastDatabase podcastDatabase;
+    private PodcastDatabase podcastDatabase;
 
     private final ValueObservable<List<Subscription>> subscriptionsObservable;
 
-    private Executor dbExecutor = Executors.newCachedThreadPool();
+    private Executor dbExecutor = Executors.newSingleThreadExecutor();
     private Handler mainHandler = new Handler(Looper.getMainLooper());
     private final Context appContext;
 
-    PodcastModel(final PodcastDatabase podcastDatabase, Context appContext) {
+    PodcastModel(final Context appContext) {
         subscriptionsObservable = new ValueObservable<>();
-        this.podcastDatabase = podcastDatabase;
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                PodcastDatabaseHelper helper = new PodcastDatabaseHelper(appContext);
+                SQLiteDatabase database = helper.getWritableDatabase();
+                podcastDatabase = new PodcastDatabase(database);
+            }
+        });
+
         this.appContext = appContext;
         updateSubscriptionList();
     }

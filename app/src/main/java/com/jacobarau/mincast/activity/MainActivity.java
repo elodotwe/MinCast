@@ -116,6 +116,8 @@ public class MainActivity extends Activity implements MainView {
 
     @Override
     public void onSubscriptionListChanged(final List<Subscription> subscriptions) {
+        //TODO: maybe don't reinstantiate the adapter every time--notify of changes via an existing one instead?
+        //TODO: what will this do to the UX when the user adds/deletes a podcast?
         listView.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {

@@ -14,10 +14,7 @@ public class PodcastModelFactory {
             return podcastModel;
         }
 
-        PodcastDatabaseHelper helper = new PodcastDatabaseHelper(applicationContext);
-        SQLiteDatabase database = helper.getWritableDatabase();
-        PodcastDatabase podcastDatabase = new PodcastDatabase(database);
-        podcastModel = new PodcastModel(podcastDatabase, applicationContext);
+        podcastModel = new PodcastModel(applicationContext);
         return podcastModel;
     }
 }

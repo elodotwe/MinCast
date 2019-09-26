@@ -8,13 +8,35 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.jacobarau.mincast.R;
-import com.jacobarau.mincast.activity.MainActivity;
+import com.jacobarau.mincast.model.PodcastModel;
+import com.jacobarau.mincast.model.PodcastModelFactory;
+import com.jacobarau.mincast.subscription.Subscription;
+import com.jacobarau.mincast.sync.rss.ParseException;
+import com.jacobarau.mincast.sync.rss.ParseResult;
+import com.jacobarau.mincast.sync.rss.RssParser;
+import com.jacobarau.mincast.ui.MainActivity;
+import com.jacobarau.mincast.ui.Notifications;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static com.jacobarau.mincast.ui.Notifications.ONGOING_NOTIFICATION_ID;
 
 public class UpdateService extends Service {
-    private static final int ONGOING_NOTIFICATION_ID = 1;
-    private static final String CHANNEL_ID = "update";
+    private final String TAG = this.getClass().getName();
+
+    ExecutorService executorService;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -23,35 +45,51 @@ public class UpdateService extends Service {
 
     @Override
     public void onCreate() {
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent =
-                PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        startForeground(ONGOING_NOTIFICATION_ID, new Notifications().buildUpdateServiceNotification(this));
+        executorService = Executors.newCachedThreadPool();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_LOW;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+        final PodcastModel model = PodcastModelFactory.getPodcastModel(getApplicationContext());
 
-        Notification.Builder notificationBuilder = new Notification.Builder(this)
-                        .setContentTitle(getText(R.string.update_notification_title))
-                        .setContentText(getText(R.string.update_notification_message))
-                        .setSmallIcon(R.drawable.ic_refresh_black)
-                        .setContentIntent(pendingIntent)
-                        .setTicker(getText(R.string.update_ticker_text));
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationBuilder.setChannelId(CHANNEL_ID);
-        }
-
-        Notification notification = notificationBuilder.getNotification();
-
-        startForeground(ONGOING_NOTIFICATION_ID, notification);
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    for (final Subscription subscription : model.getSubscriptions().get()) {
+                        executorService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                File destination = new File(getCacheDir(), String.valueOf(subscription.getUrl().hashCode()));
+                                try {
+                                    new Downloader().downloadFile(new URL(subscription.getUrl()), destination, new Downloader.ProgressListener() {
+                                        @Override
+                                        public void onProgress(long position, Long total) {
+                                            Log.d(TAG, "onProgress() called with: position = [" + position + "], total = [" + total + "]");
+                                        }
+                                    });
+                                    RssParser parser = new RssParser();
+                                    ParseResult result = parser.parseRSS(new FileInputStream(destination), "utf-8");
+                                    Log.i(TAG, "run: result was " + result);
+                                    subscription.setTitle(result.subscription.getTitle());
+                                    model.dbExecutor.submit(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            model.podcastDatabase.updateSubscription(subscription);
+                                        }
+                                    });
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                } catch (XmlPullParserException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

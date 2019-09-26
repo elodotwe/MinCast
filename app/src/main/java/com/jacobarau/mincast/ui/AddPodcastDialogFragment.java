@@ -1,4 +1,4 @@
-package com.jacobarau.mincast.activity;
+package com.jacobarau.mincast.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

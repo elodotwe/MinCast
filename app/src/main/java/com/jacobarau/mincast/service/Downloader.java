@@ -39,7 +39,7 @@ public class Downloader {
             // expect HTTP 200 OK, so we don't mistakenly save error report
             // instead of the file
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                String msg = "downloadFile: response code was not ok (actual " + connection.getResponseCode() + "; message was '" + connection.getResponseMessage() +"'";
+                String msg = "downloadFile: response code was not ok (actual " + connection.getResponseCode() + "; message was '" + connection.getResponseMessage() + "'";
                 Log.e(TAG, msg);
                 throw new IOException(msg);
             }
@@ -63,9 +63,12 @@ public class Downloader {
                 }
                 total += count;
                 // publishing the progress....
-                progressListener.onProgress(total, fileLength == -1 ? null : (long)fileLength);
+                progressListener.onProgress(total, fileLength == -1 ? null : (long) fileLength);
                 output.write(data, 0, count);
             }
+        } catch (Exception e) {
+            Log.e(TAG, "downloadFile: ", e);
+            throw e;
         } finally {
             try {
                 if (output != null)

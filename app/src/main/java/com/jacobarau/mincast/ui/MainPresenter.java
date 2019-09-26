@@ -1,4 +1,4 @@
-package com.jacobarau.mincast.activity;
+package com.jacobarau.mincast.ui;
 
 import com.jacobarau.mincast.model.PodcastModel;
 import com.jacobarau.mincast.subscription.Subscription;

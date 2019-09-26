@@ -16,15 +16,18 @@ import org.threeten.bp.Instant;
 
 import java.util.List;
 import java.util.Observer;
-import java.util.concurrent.Executor;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class PodcastModel {
-    private PodcastDatabase podcastDatabase;
+    //TODO: don't make public, rearchitect in a not embarrassing way
+    public PodcastDatabase podcastDatabase;
 
     private final ValueObservable<List<Subscription>> subscriptionsObservable;
-
-    private Executor dbExecutor = Executors.newSingleThreadExecutor();
+    //TODO: don't make public, rearchitect in a not embarrassing way
+    public ExecutorService dbExecutor = Executors.newSingleThreadExecutor();
     private Handler mainHandler = new Handler(Looper.getMainLooper());
     private final Context appContext;
 
@@ -121,4 +124,15 @@ public class PodcastModel {
             appContext.startService(new Intent(appContext, UpdateService.class));
         }
     }
+
+    public Future<List<Subscription>> getSubscriptions() {
+        return dbExecutor.submit(new Callable<List<Subscription>>() {
+            @Override
+            public List<Subscription> call() {
+                return podcastDatabase.getSubscriptions();
+            }
+        });
+    }
+
+
 }

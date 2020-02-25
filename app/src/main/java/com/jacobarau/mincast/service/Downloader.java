@@ -26,7 +26,7 @@ public class Downloader {
         void onProgress(long position, Long total);
     }
 
-    protected void downloadFile(URL url, File destination, ProgressListener progressListener) throws IOException {
+    public void downloadFile(URL url, File destination, ProgressListener progressListener) throws IOException {
         InputStream input = null;
         OutputStream output = null;
         HttpURLConnection connection = null;

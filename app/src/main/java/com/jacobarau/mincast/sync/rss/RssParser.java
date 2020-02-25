@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class RssParser {
+    //TODO more robust unhappy path handling
     public ParseResult parseRSS(InputStream inputStream, String encoding) throws XmlPullParserException, IOException, ParseException {
         ParseResult result = new ParseResult();
         Subscription subscription = new Subscription();

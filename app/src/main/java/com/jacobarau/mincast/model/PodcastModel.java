@@ -203,39 +203,34 @@ public class PodcastModel {
         //Probably ultimately need a data model that can broadcast events about itself
         //to the workers so e.g. we can kill a downloader that's downloading an episode of a
         //freshly deleted podcast. But I don't feel like writing that just this second.
-        dbExecutor.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    for (final Subscription subscription : getSubscriptions().get()) {
-                        executorService.submit(new Runnable() {
+        try {
+            for (final Subscription subscription : getSubscriptions().get()) {
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        ParseResult result = parseFromUrl(subscription.getUrl());
+                        if (result == null) {
+                            //TODO: tell the user there's an error
+                            Log.e(TAG, "Error updating subscription with URL " + subscription.getUrl());
+                            return;
+                        }
+
+                        subscription.setTitle(result.subscription.getTitle());
+                        dbExecutor.submit(new Runnable() {
                             @Override
                             public void run() {
-                                ParseResult result = parseFromUrl(subscription.getUrl());
-                                if (result == null) {
-                                    //TODO: tell the user there's an error
-                                    Log.e(TAG, "Error updating subscription with URL " + subscription.getUrl());
-                                    return;
-                                }
-
-                                subscription.setTitle(result.subscription.getTitle());
-                                dbExecutor.submit(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        podcastDatabase.updateSubscription(subscription);
-                                        //TODO ooooohhhh hacky as shit
-                                        updateSubscriptionList();
-                                    }
-                                });
+                                podcastDatabase.updateSubscription(subscription);
+                                //TODO ooooohhhh hacky as shit
+                                updateSubscriptionList();
                             }
                         });
                     }
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                });
             }
-        });
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

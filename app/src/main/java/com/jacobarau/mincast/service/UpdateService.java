@@ -23,4 +23,10 @@ public class UpdateService extends Service {
         final PodcastModel model = PodcastModelFactory.getPodcastModel(getApplicationContext());
         model.onServiceOnCreate();
     }
+
+    @Override
+    public void onDestroy() {
+        final PodcastModel model = PodcastModelFactory.getPodcastModel(getApplicationContext());
+        model.onServiceOnDestroy();
+    }
 }

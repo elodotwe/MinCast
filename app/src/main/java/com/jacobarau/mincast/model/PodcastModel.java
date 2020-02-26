@@ -195,15 +195,16 @@ public class PodcastModel {
     /**
      * Called only from the UpdateService when said service is created.
      *
+     * Called on main thread, needs to return quickly.
      */
     public void onServiceOnCreate() {
-        //TODO don't allow multiple instances of this function to run in parallel
-        //honestly I'm not convinced this will hold up under strain--user running an update
+        //TODO honestly I'm not convinced this will hold up under strain--user running an update
         //while browsing around the app and adding/deleting podcasts
         //Probably ultimately need a data model that can broadcast events about itself
         //to the workers so e.g. we can kill a downloader that's downloading an episode of a
         //freshly deleted podcast. But I don't feel like writing that just this second.
         try {
+            // TODO: should not be running on main thread! Blocks waiting for database!
             for (final Subscription subscription : getSubscriptions().get()) {
                 executorService.submit(new Runnable() {
                     @Override
@@ -224,13 +225,23 @@ public class PodcastModel {
                                 updateSubscriptionList();
                             }
                         });
+
                     }
                 });
             }
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            //TODO gross
+            throw new RuntimeException(e);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //TODO also gross.
+            throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Called on main thread
+     */
+    public void onServiceOnDestroy() {
+        // TODO make sure things are stopped when the system is asking us to spin down
     }
 }

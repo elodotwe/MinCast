@@ -2,6 +2,7 @@ package com.jacobarau.mincast.db;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.jacobarau.mincast.subscription.Item;
 import com.jacobarau.mincast.subscription.Subscription;
 
 import org.junit.Assert;
@@ -17,7 +18,7 @@ import java.util.List;
 @RunWith(RobolectricTestRunner.class)
 public class PodcastDatabaseTest {
     @Test
-    public void testInsert() {
+    public void testInsertAndGetSubscription() {
         PodcastDatabaseHelper helper = new PodcastDatabaseHelper(RuntimeEnvironment.application.getApplicationContext());
         SQLiteDatabase database = helper.getWritableDatabase();
         PodcastDatabase podcastDatabase = new PodcastDatabase(database);
@@ -34,5 +35,27 @@ public class PodcastDatabaseTest {
         List<Subscription> subscriptions = podcastDatabase.getSubscriptions();
         Assert.assertEquals(1, subscriptions.size());
         Assert.assertEquals(subscription, subscriptions.get(0));
+    }
+
+    @Test
+    public void testInsertAndGetItem() {
+        PodcastDatabaseHelper helper = new PodcastDatabaseHelper(RuntimeEnvironment.application.getApplicationContext());
+        SQLiteDatabase database = helper.getWritableDatabase();
+        PodcastDatabase podcastDatabase = new PodcastDatabase(database);
+
+        Item item = new Item();
+        item.setDescription("description");
+        item.setEnclosureLengthBytes(123);
+        item.setEnclosureMimeType("mime");
+        item.setEnclosureUrl("url");
+        item.setId(12);
+        item.setPublishDate(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        item.setTitle("title");
+        item.setSubscriptionUrl("url");
+        podcastDatabase.addItem(item);
+
+        List<Item> items = podcastDatabase.getItems();
+        Assert.assertEquals(1, items.size());
+        Assert.assertEquals(item, items.get(0));
     }
 }

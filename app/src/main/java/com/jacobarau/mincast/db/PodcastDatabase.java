@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.jacobarau.mincast.subscription.Item;
 import com.jacobarau.mincast.subscription.Subscription;
 
 import org.threeten.bp.Instant;
@@ -68,5 +69,21 @@ public class PodcastDatabase {
         contentValues.put(Subscriptions.COLUMN_NAME_TITLE, subscription.getTitle());
         contentValues.put(Subscriptions.COLUMN_NAME_URL, subscription.getUrl());
         return contentValues;
+    }
+
+    public List<Item> getItems() {
+        return null;
+    }
+
+    public void addItem(Item item) {
+        throw new RuntimeException("Not implemented yet");
+    }
+
+    public void deleteItem(Item item) {
+        throw new RuntimeException("Not implemented yet");
+    }
+
+    public void updateItem(Item item) {
+        throw new RuntimeException("Not implemented yet");
     }
 }

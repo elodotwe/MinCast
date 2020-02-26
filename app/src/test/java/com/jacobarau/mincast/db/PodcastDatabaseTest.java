@@ -38,7 +38,7 @@ public class PodcastDatabaseTest {
     }
 
     @Test
-    public void testInsertAndGetItem() {
+    public void testCRUDItem() {
         PodcastDatabaseHelper helper = new PodcastDatabaseHelper(RuntimeEnvironment.application.getApplicationContext());
         SQLiteDatabase database = helper.getWritableDatabase();
         PodcastDatabase podcastDatabase = new PodcastDatabase(database);
@@ -47,15 +47,33 @@ public class PodcastDatabaseTest {
         item.setDescription("description");
         item.setEnclosureLengthBytes(123);
         item.setEnclosureMimeType("mime");
-        item.setEnclosureUrl("url");
+        item.setEnclosureUrl("enclosure_url");
         item.setId(12);
         item.setPublishDate(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         item.setTitle("title");
-        item.setSubscriptionUrl("url");
+        item.setSubscriptionUrl("sub_url");
         podcastDatabase.addItem(item);
 
         List<Item> items = podcastDatabase.getItems();
         Assert.assertEquals(1, items.size());
         Assert.assertEquals(item, items.get(0));
+
+        item.setDescription("description++");
+        item.setEnclosureLengthBytes(124);
+        item.setEnclosureMimeType("mime2");
+        item.setEnclosureUrl("enclosure_url2");
+        item.setPublishDate(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        item.setTitle("title2");
+        item.setSubscriptionUrl("sub_url2");
+        podcastDatabase.updateItem(item);
+
+        items = podcastDatabase.getItems();
+        Assert.assertEquals(1, items.size());
+        Assert.assertEquals(item, items.get(0));
+
+        podcastDatabase.deleteItem(item);
+
+        items = podcastDatabase.getItems();
+        Assert.assertEquals(0, items.size());
     }
 }

@@ -8,7 +8,7 @@
     <string name="add_podcast_description_text">Specify podcast feed URL (RSS):</string>
     <string name="podcast_url_hint">example.com/rss</string>
     <string name="unsubscribe">Unsubscribe</string>
-    <string name="update_notification_title">Updating podcasts...</string>
+    <string name="update_notification_title">Updating podcasts…</string>
     <string name="update_notification_message">A cool message bro</string>
     <string name="update_ticker_text">ticker text</string>
     <string name="channel_name">Podcast Update</string>

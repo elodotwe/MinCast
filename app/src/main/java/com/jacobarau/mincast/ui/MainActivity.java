@@ -2,6 +2,7 @@ package com.jacobarau.mincast.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -98,6 +100,13 @@ public class MainActivity extends Activity implements MainView {
             @Override
             public void onDestroyActionMode(ActionMode mode) {
 
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("test", "onItemClick: " + position);
             }
         });
     }

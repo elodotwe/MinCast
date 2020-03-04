@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg3775"
+   viewBox="0 0 32 32"
+   height="32px"
+   width="32px"
+   y="0px"
+   x="0px"
+   preserveAspectRatio="xMinYMin meet"
+   version="1.1">
+  <metadata
+     id="metadata3781">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3779" />
+  <path
+     style="fill:none"
+     fill="rgb(255,255,255)"
+     id="path3727"
+     d="M0 0h32v32h-32v-32z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3729"
+     d="M1 2h26v1h-3v10h-17v-10h-5v27h2v-16h24v16h2v-24h1v25h-30v-29z" />
+  <path
+     fill="rgb(63,81,181)"
+     id="path3731"
+     d="M2 3h5v10h17v-10h3v1h1v1h1v1h1v24h-2v-16h-24v16h-2v-27z" />
+  <path
+     fill="rgb(255,255,255)"
+     id="path3733"
+     d="M8 3h15v9h-15v-9z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3735"
+     d="M27 3h1v1h-1v-1z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3737"
+     d="M18 4h4v7h-4v-7z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3739"
+     d="M28 4h1v1h-1v-1z" />
+  <path
+     fill="rgb(63,81,181)"
+     id="path3741"
+     d="M19 5h2v5h-2v-5z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3743"
+     d="M29 5h1v1h-1v-1z" />
+  <path
+     fill="rgb(255,255,255)"
+     id="path3745"
+     d="M5 15h22v15h-22v-15z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3747"
+     d="M9 18h6v1h-6v-1z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3749"
+     d="M15 19h2v1h-2v-1z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3751"
+     d="M17 20h2v1h-2v-1z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3753"
+     d="M9 21h3v1h-3v-1z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3755"
+     d="M19 21h1v1h-1v-1z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3757"
+     d="M12 22h3v1h-3v-1z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3759"
+     d="M20 22h1v2h-1v-2z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3761"
+     d="M15 23h1v1h-1v-1z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3763"
+     d="M9 24h2v1h-2v-1z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3765"
+     d="M16 24h1v2h-1v-2z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3767"
+     d="M21 24h1v5h-1v-5z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3769"
+     d="M11 25h2v2h-1v-1h-1v-1z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3771"
+     d="M17 26h1v3h-1v-3z" />
+  <path
+     fill="rgb(0,0,0)"
+     id="path3773"
+     d="M13 27h1v2h-1v-2z" />
+</svg>

@@ -12,7 +12,7 @@
         android:theme="@style/BaseActivity"
         android:name="com.jacobarau.mincast.MinCastApplication"
         tools:ignore="GoogleAppIndexingWarning"
-        android:icon="@drawable/logo">
+        android:icon="@drawable/ic_logo">
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

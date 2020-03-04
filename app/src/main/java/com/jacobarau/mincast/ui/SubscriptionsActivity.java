@@ -24,8 +24,8 @@ import com.jacobarau.mincast.subscription.Subscription;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity implements MainView {
-    private MainPresenter presenter;
+public class SubscriptionsActivity extends Activity implements SubscriptionsView {
+    private SubscriptionsPresenter presenter;
     private ListView listView;
 
     @Override
@@ -57,7 +57,7 @@ public class MainActivity extends Activity implements MainView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        presenter = new MainPresenter(this, PodcastModelFactory.getPodcastModel(getApplicationContext()));
+        presenter = new SubscriptionsPresenter(this, PodcastModelFactory.getPodcastModel(getApplicationContext()));
         listView = findViewById(R.id.podcasts_listview);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {

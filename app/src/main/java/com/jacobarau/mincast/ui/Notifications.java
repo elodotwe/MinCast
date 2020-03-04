@@ -15,7 +15,7 @@ public class Notifications {
     public static final int ONGOING_NOTIFICATION_ID = 1;
 
     public Notification buildUpdateServiceNotification(Context context) {
-        Intent notificationIntent = new Intent(context, MainActivity.class);
+        Intent notificationIntent = new Intent(context, SubscriptionsActivity.class);
         PendingIntent pendingIntent =
                 PendingIntent.getActivity(context, 0, notificationIntent, 0);
 

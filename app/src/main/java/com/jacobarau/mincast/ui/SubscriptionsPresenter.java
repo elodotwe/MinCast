@@ -7,20 +7,20 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-class MainPresenter {
-    private final MainView mainView;
+class SubscriptionsPresenter {
+    private final SubscriptionsView subscriptionsView;
     private final PodcastModel podcastModel;
     private final Observer subscriptionObserver;
 
-    MainPresenter(final MainView mainView, PodcastModel podcastModel) {
-        this.mainView = mainView;
+    SubscriptionsPresenter(final SubscriptionsView subscriptionsView, PodcastModel podcastModel) {
+        this.subscriptionsView = subscriptionsView;
         this.podcastModel = podcastModel;
 
         subscriptionObserver = new Observer() {
             @Override
             public void update(Observable o, Object arg) {
                 // TODO: This is shit. Let's make it not shit after we get it workingish. Maybe.
-                mainView.onSubscriptionListChanged((List<Subscription>) arg);
+                subscriptionsView.onSubscriptionListChanged((List<Subscription>) arg);
             }
         };
     }
@@ -34,7 +34,7 @@ class MainPresenter {
     }
 
     void onAddPodcastSelected() {
-        mainView.showAddPodcastDialog();
+        subscriptionsView.showAddPodcastDialog();
     }
 
     void onUnsubscribe(List<Subscription> subscriptions) {

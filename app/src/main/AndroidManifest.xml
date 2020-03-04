@@ -13,7 +13,7 @@
         android:name="com.jacobarau.mincast.MinCastApplication"
         tools:ignore="GoogleAppIndexingWarning"
         android:icon="@drawable/ic_logo">
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.SubscriptionsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

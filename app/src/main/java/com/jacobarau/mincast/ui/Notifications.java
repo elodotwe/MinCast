@@ -34,7 +34,7 @@ public class Notifications {
         Notification.Builder notificationBuilder = new Notification.Builder(context)
                 .setContentTitle(context.getText(R.string.update_notification_title))
                 .setContentText(context.getText(R.string.update_notification_message))
-                .setSmallIcon(R.drawable.ic_refresh_black)
+                .setSmallIcon(android.R.drawable.stat_notify_sync)
                 .setContentIntent(pendingIntent)
                 .setTicker(context.getText(R.string.update_ticker_text));
 

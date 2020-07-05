@@ -1,21 +1,23 @@
 package com.jacobarau.mincast.sync.rss;
 
+import android.util.Log;
 import android.util.Xml;
 
 import com.jacobarau.mincast.subscription.Item;
 import com.jacobarau.mincast.subscription.Subscription;
 
-import org.threeten.bp.ZonedDateTime;
-import org.threeten.bp.format.DateTimeFormatter;
-import org.threeten.bp.format.DateTimeParseException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class RssParser {
+    private static String TAG = RssParser.class.getSimpleName();
+
     //TODO more robust unhappy path handling
     public ParseResult parseRSS(InputStream inputStream, String encoding) throws XmlPullParserException, IOException, ParseException {
         ParseResult result = new ParseResult();
@@ -151,11 +153,14 @@ public class RssParser {
                         break;
                     case "pubDate":
                         String dateStr = processTextTag(parser);
+                        item.setPublishDate(null);
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E, d MMM y H:m:s Z", Locale.US);
                         try {
-                            item.setPublishDate(ZonedDateTime.parse(dateStr, DateTimeFormatter.RFC_1123_DATE_TIME).toInstant());
-                        } catch (DateTimeParseException e) {
-                            item.setPublishDate(null);
+                            item.setPublishDate(simpleDateFormat.parse(dateStr));
+                        } catch (java.text.ParseException e) {
+                            Log.e(TAG, "processItem: Date string of '" + dateStr + "' not parseable", e);
                         }
+
                         break;
                     default:
                         skipTag(parser);

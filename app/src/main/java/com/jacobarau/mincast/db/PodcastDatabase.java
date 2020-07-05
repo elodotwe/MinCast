@@ -7,9 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.jacobarau.mincast.subscription.Item;
 import com.jacobarau.mincast.subscription.Subscription;
 
-import org.threeten.bp.Instant;
-
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.jacobarau.mincast.db.PodcastDatabaseContract.Subscriptions;
@@ -53,7 +52,7 @@ public class PodcastDatabase {
             subscription.setDescription(cursor.getString(2));
             subscription.setImageUrl(cursor.getString(3));
             subscription.setLink(cursor.getString(4));
-            subscription.setLastUpdated(Instant.ofEpochSecond(cursor.getLong(5)));
+            subscription.setLastUpdated(new Date(cursor.getLong(5) * 1000));
             subscriptions.add(subscription);
         }
         cursor.close();
@@ -64,7 +63,7 @@ public class PodcastDatabase {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Subscriptions.COLUMN_NAME_DESCRIPTION, subscription.getDescription());
         contentValues.put(Subscriptions.COLUMN_NAME_IMAGE_URL, subscription.getImageUrl());
-        contentValues.put(Subscriptions.COLUMN_NAME_LAST_UPDATED, subscription.getLastUpdated().toEpochMilli()/1000);
+        contentValues.put(Subscriptions.COLUMN_NAME_LAST_UPDATED, subscription.getLastUpdated().getTime()/1000);
         contentValues.put(Subscriptions.COLUMN_NAME_LINK, subscription.getLink());
         contentValues.put(Subscriptions.COLUMN_NAME_TITLE, subscription.getTitle());
         contentValues.put(Subscriptions.COLUMN_NAME_URL, subscription.getUrl());

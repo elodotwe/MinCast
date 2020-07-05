@@ -1,6 +1,6 @@
 package com.jacobarau.mincast.subscription;
 
-import org.threeten.bp.Instant;
+import java.util.Date;
 
 public class Item {
     /**
@@ -30,7 +30,7 @@ public class Item {
     /**
      * Date-timestamp of when this item was published; null if not present in the RSS
      */
-    private Instant publishDate;
+    private Date publishDate;
 
     /**
      * If present in the RSS, the URL to the enclosure (typically the podcast audio goes here)
@@ -81,7 +81,7 @@ public class Item {
         return description;
     }
 
-    public Instant getPublishDate() {
+    public Date getPublishDate() {
         return publishDate;
     }
 
@@ -113,7 +113,7 @@ public class Item {
         this.description = description;
     }
 
-    public void setPublishDate(Instant publishDate) {
+    public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
     }
 

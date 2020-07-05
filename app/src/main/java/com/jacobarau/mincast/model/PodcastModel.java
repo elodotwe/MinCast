@@ -18,7 +18,6 @@ import com.jacobarau.mincast.sync.rss.ParseException;
 import com.jacobarau.mincast.sync.rss.ParseResult;
 import com.jacobarau.mincast.sync.rss.RssParser;
 
-import org.threeten.bp.Instant;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
@@ -26,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Observer;
 import java.util.concurrent.Callable;
@@ -101,7 +101,7 @@ public class PodcastModel {
     public void subscribeTo(String url) {
         final Subscription subscription = new Subscription();
         subscription.setUrl(url);
-        subscription.setLastUpdated(Instant.now());
+        subscription.setLastUpdated(new Date());
         subscription.setTitle(url);
 
         dbExecutor.execute(new Runnable() {

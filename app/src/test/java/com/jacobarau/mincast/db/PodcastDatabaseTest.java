@@ -10,9 +10,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-import org.threeten.bp.Instant;
-import org.threeten.bp.temporal.ChronoUnit;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
@@ -24,7 +24,15 @@ public class PodcastDatabaseTest {
         PodcastDatabase podcastDatabase = new PodcastDatabase(database);
 
         Subscription subscription = new Subscription();
-        subscription.setLastUpdated(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        Date date = new Date();
+        // Database is only specced to store date rounded to the nearest second, so we need to
+        // truncate the millisecond portion of the Date we feed it.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.MILLISECOND, 0);
+        date = calendar.getTime();
+
+        subscription.setLastUpdated(date);
         subscription.setLink("blahblahblah");
         subscription.setImageUrl("an image");
         subscription.setDescription("description");
@@ -49,7 +57,7 @@ public class PodcastDatabaseTest {
         item.setEnclosureMimeType("mime");
         item.setEnclosureUrl("enclosure_url");
         item.setId(12);
-        item.setPublishDate(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        item.setPublishDate(new Date());
         item.setTitle("title");
         item.setSubscriptionUrl("sub_url");
         podcastDatabase.addItem(item);
@@ -62,7 +70,7 @@ public class PodcastDatabaseTest {
         item.setEnclosureLengthBytes(124);
         item.setEnclosureMimeType("mime2");
         item.setEnclosureUrl("enclosure_url2");
-        item.setPublishDate(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        item.setPublishDate(new Date());
         item.setTitle("title2");
         item.setSubscriptionUrl("sub_url2");
         podcastDatabase.updateItem(item);

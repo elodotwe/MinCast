@@ -1,6 +1,6 @@
 package com.jacobarau.mincast.subscription;
 
-import org.threeten.bp.Instant;
+import java.util.Date;
 
 public class Subscription {
     /**
@@ -35,7 +35,7 @@ public class Subscription {
      * It can be null if, for instance, a feed was just added--the new subscription will be added to
      * the database before we've fetched the RSS and filled out any fields yet.
      */
-    private Instant lastUpdated;
+    private Date lastUpdated;
 
     @SuppressWarnings("NullableProblems")
     @Override
@@ -90,11 +90,11 @@ public class Subscription {
         this.imageUrl = imageUrl;
     }
 
-    public Instant getLastUpdated() {
+    public Date getLastUpdated() {
         return lastUpdated;
     }
 
-    public void setLastUpdated(Instant lastUpdated) {
+    public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 

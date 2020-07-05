@@ -11,6 +11,11 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,6 +24,12 @@ public class RssParserTest {
     @Before
     public void setUp() {
         ShadowLog.stream = System.out;
+    }
+
+    private String formatDate(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return dateFormat.format(date);
     }
 
     @Test
@@ -38,7 +49,8 @@ public class RssParserTest {
         assertEquals("audio/mpeg", item0.getEnclosureMimeType());
         assertEquals("http://feedproxy.google.com/~r/CatholicInASmallTown/~5/Vf35fWSH1t0/CST_463.mp3",
                 item0.getEnclosureUrl());
-        assertEquals("2018-09-05T01:22:58Z", item0.getPublishDate().toString());
+
+        assertEquals("2018-09-05T01:22:58", formatDate(item0.getPublishDate()));
 
         Item item1 = result.items.get(1);
         assertEquals("CST #462: Pantless Tubing", item1.getTitle());
@@ -49,7 +61,7 @@ public class RssParserTest {
         assertEquals("http://feedproxy.google.com/~r/CatholicInASmallTown/~5/FQxnJ8NUEqc/CST_462.mp3",
                 item1.getEnclosureUrl());
         //28 Aug 2018 02:11:07
-        assertEquals("2018-08-28T02:11:07Z", item1.getPublishDate().toString());
+        assertEquals("2018-08-28T02:11:07", formatDate(item1.getPublishDate()));
 
         assertEquals("A podcast about a Catholic couple raising kids in a small town.\r\n" +
                 "\r\n" +

@@ -6,27 +6,27 @@ public class Subscription {
     /**
      * URL of the RSS feed associated with this subscription.
      */
-    private String url;
+    public String url;
 
     /**
      * Title of this subscription, from the RSS feed.
      */
-    private String title;
+    public String title;
 
     /**
      * Link to the feed's website, from the RSS.
      */
-    private String link;
+    public String link;
 
     /**
      * Phrase/sentence describing the feed, from the RSS.
      */
-    private String description;
+    public String description;
 
     /**
      * If present in the RSS, a URL to an associated image.
      */
-    private String imageUrl;
+    public String imageUrl;
 
     /**
      * The instant at which the podcast app has last fetched and parsed the RSS for this subscription.
@@ -35,7 +35,7 @@ public class Subscription {
      * It can be null if, for instance, a feed was just added--the new subscription will be added to
      * the database before we've fetched the RSS and filled out any fields yet.
      */
-    private Date lastUpdated;
+    public Date lastUpdated;
 
     @SuppressWarnings("NullableProblems")
     @Override
@@ -48,54 +48,6 @@ public class Subscription {
                 ", imageUrl='" + imageUrl + '\'' +
                 ", lastUpdated=" + lastUpdated +
                 '}';
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
 
     @Override

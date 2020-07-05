@@ -32,12 +32,12 @@ public class PodcastDatabaseTest {
         calendar.set(Calendar.MILLISECOND, 0);
         date = calendar.getTime();
 
-        subscription.setLastUpdated(date);
-        subscription.setLink("blahblahblah");
-        subscription.setImageUrl("an image");
-        subscription.setDescription("description");
-        subscription.setTitle("title");
-        subscription.setUrl("key url");
+        subscription.lastUpdated = date;
+        subscription.link = "blahblahblah";
+        subscription.imageUrl = "an image";
+        subscription.description = "description";
+        subscription.title = "title";
+        subscription.url = "key url";
         podcastDatabase.addSubscription(subscription);
 
         List<Subscription> subscriptions = podcastDatabase.getSubscriptions();
@@ -52,27 +52,27 @@ public class PodcastDatabaseTest {
         PodcastDatabase podcastDatabase = new PodcastDatabase(database);
 
         Item item = new Item();
-        item.setDescription("description");
-        item.setEnclosureLengthBytes(123);
-        item.setEnclosureMimeType("mime");
-        item.setEnclosureUrl("enclosure_url");
-        item.setId(12);
-        item.setPublishDate(new Date());
-        item.setTitle("title");
-        item.setSubscriptionUrl("sub_url");
+        item.description = "description";
+        item.enclosureLengthBytes = 123;
+        item.enclosureMimeType = "mime";
+        item.enclosureUrl = "enclosure_url";
+        item.id = 12;
+        item.publishDate = new Date();
+        item.title = "title";
+        item.subscriptionUrl = "sub_url";
         podcastDatabase.addItem(item);
 
         List<Item> items = podcastDatabase.getItems();
         Assert.assertEquals(1, items.size());
         Assert.assertEquals(item, items.get(0));
 
-        item.setDescription("description++");
-        item.setEnclosureLengthBytes(124);
-        item.setEnclosureMimeType("mime2");
-        item.setEnclosureUrl("enclosure_url2");
-        item.setPublishDate(new Date());
-        item.setTitle("title2");
-        item.setSubscriptionUrl("sub_url2");
+        item.description = "description++";
+        item.enclosureLengthBytes = 124;
+        item.enclosureMimeType = "mime2";
+        item.enclosureUrl = "enclosure_url2";
+        item.publishDate = new Date();
+        item.title = "title2";
+        item.subscriptionUrl = "sub_url2";
         podcastDatabase.updateItem(item);
 
         items = podcastDatabase.getItems();

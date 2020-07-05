@@ -100,9 +100,9 @@ public class PodcastModel {
 
     public void subscribeTo(String url) {
         final Subscription subscription = new Subscription();
-        subscription.setUrl(url);
-        subscription.setLastUpdated(new Date());
-        subscription.setTitle(url);
+        subscription.url = url;
+        subscription.lastUpdated = new Date();
+        subscription.title = url;
 
         dbExecutor.execute(new Runnable() {
             @Override
@@ -209,14 +209,14 @@ public class PodcastModel {
                 executorService.submit(new Runnable() {
                     @Override
                     public void run() {
-                        ParseResult result = parseFromUrl(subscription.getUrl());
+                        ParseResult result = parseFromUrl(subscription.url);
                         if (result == null) {
                             //TODO: tell the user there's an error
-                            Log.e(TAG, "Error updating subscription with URL " + subscription.getUrl());
+                            Log.e(TAG, "Error updating subscription with URL " + subscription.url);
                             return;
                         }
 
-                        subscription.setTitle(result.subscription.getTitle());
+                        subscription.title = result.subscription.title;
                         dbExecutor.submit(new Runnable() {
                             @Override
                             public void run() {

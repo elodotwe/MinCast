@@ -25,12 +25,12 @@ public class PodcastDatabase {
     }
 
     public void deleteSubscription(Subscription subscription) {
-        database.delete(Subscriptions.TABLE_NAME, Subscriptions.COLUMN_NAME_URL + " = ?", new String[]{subscription.getUrl()});
+        database.delete(Subscriptions.TABLE_NAME, Subscriptions.COLUMN_NAME_URL + " = ?", new String[]{subscription.url});
     }
 
     public void updateSubscription(Subscription subscription) {
         database.update(Subscriptions.TABLE_NAME, subscriptionToValues(subscription),
-                Subscriptions.COLUMN_NAME_URL + " = ?", new String[]{subscription.getUrl()});
+                Subscriptions.COLUMN_NAME_URL + " = ?", new String[]{subscription.url});
     }
 
     public List<Subscription> getSubscriptions() {
@@ -47,12 +47,12 @@ public class PodcastDatabase {
         List<Subscription> subscriptions = new ArrayList<>();
         while (cursor.moveToNext()) {
             Subscription subscription = new Subscription();
-            subscription.setUrl(cursor.getString(0));
-            subscription.setTitle(cursor.getString(1));
-            subscription.setDescription(cursor.getString(2));
-            subscription.setImageUrl(cursor.getString(3));
-            subscription.setLink(cursor.getString(4));
-            subscription.setLastUpdated(new Date(cursor.getLong(5) * 1000));
+            subscription.url = cursor.getString(0);
+            subscription.title = cursor.getString(1);
+            subscription.description = cursor.getString(2);
+            subscription.imageUrl = cursor.getString(3);
+            subscription.link = cursor.getString(4);
+            subscription.lastUpdated = new Date(cursor.getLong(5) * 1000);
             subscriptions.add(subscription);
         }
         cursor.close();
@@ -61,12 +61,12 @@ public class PodcastDatabase {
 
     private ContentValues subscriptionToValues(Subscription subscription) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(Subscriptions.COLUMN_NAME_DESCRIPTION, subscription.getDescription());
-        contentValues.put(Subscriptions.COLUMN_NAME_IMAGE_URL, subscription.getImageUrl());
-        contentValues.put(Subscriptions.COLUMN_NAME_LAST_UPDATED, subscription.getLastUpdated().getTime()/1000);
-        contentValues.put(Subscriptions.COLUMN_NAME_LINK, subscription.getLink());
-        contentValues.put(Subscriptions.COLUMN_NAME_TITLE, subscription.getTitle());
-        contentValues.put(Subscriptions.COLUMN_NAME_URL, subscription.getUrl());
+        contentValues.put(Subscriptions.COLUMN_NAME_DESCRIPTION, subscription.description);
+        contentValues.put(Subscriptions.COLUMN_NAME_IMAGE_URL, subscription.imageUrl);
+        contentValues.put(Subscriptions.COLUMN_NAME_LAST_UPDATED, subscription.lastUpdated.getTime()/1000);
+        contentValues.put(Subscriptions.COLUMN_NAME_LINK, subscription.link);
+        contentValues.put(Subscriptions.COLUMN_NAME_TITLE, subscription.title);
+        contentValues.put(Subscriptions.COLUMN_NAME_URL, subscription.url);
         return contentValues;
     }
 

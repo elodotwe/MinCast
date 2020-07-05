@@ -37,13 +37,13 @@ public class RssParser {
             if (parser.getEventType() == XmlPullParser.START_TAG) {
                 switch (parser.getName()) {
                     case "title":
-                        subscription.setTitle(processTextTag(parser));
+                        subscription.title = processTextTag(parser);
                         break;
                     case "link":
-                        subscription.setLink(processTextTag(parser));
+                        subscription.link = processTextTag(parser);
                         break;
                     case "description":
-                        subscription.setDescription(processTextTag(parser));
+                        subscription.description = processTextTag(parser);
                         break;
                     case "image":
                         processImageTag(parser, subscription);
@@ -134,29 +134,29 @@ public class RssParser {
             if (parser.getEventType() == XmlPullParser.START_TAG) {
                 switch (parser.getName()) {
                     case "title":
-                        item.setTitle(processTextTag(parser));
+                        item.title = processTextTag(parser);
                         break;
                     case "description":
-                        item.setDescription(processTextTag(parser));
+                        item.description = processTextTag(parser);
                         break;
                     case "enclosure":
                         String length = parser.getAttributeValue(null, "length");
                         if (length != null) {
-                            item.setEnclosureLengthBytes(Integer.parseInt(length));
+                            item.enclosureLengthBytes = Integer.parseInt(length);
                         }
 
-                        item.setEnclosureUrl(parser.getAttributeValue(null, "url"));
+                        item.enclosureUrl = parser.getAttributeValue(null, "url");
 
-                        item.setEnclosureMimeType(parser.getAttributeValue(null, "type"));
+                        item.enclosureMimeType = parser.getAttributeValue(null, "type");
 
                         skipTag(parser);
                         break;
                     case "pubDate":
                         String dateStr = processTextTag(parser);
-                        item.setPublishDate(null);
+                        item.publishDate = null;
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E, d MMM y H:m:s Z", Locale.US);
                         try {
-                            item.setPublishDate(simpleDateFormat.parse(dateStr));
+                            item.publishDate = simpleDateFormat.parse(dateStr);
                         } catch (java.text.ParseException e) {
                             Log.e(TAG, "processItem: Date string of '" + dateStr + "' not parseable", e);
                         }
@@ -184,7 +184,7 @@ public class RssParser {
             if (parser.getEventType() == XmlPullParser.START_TAG) {
                 switch (parser.getName()) {
                     case "url":
-                        subscription.setImageUrl(processTextTag(parser));
+                        subscription.imageUrl = processTextTag(parser);
                         break;
                     default:
                         skipTag(parser);

@@ -150,7 +150,7 @@ public class SubscriptionsActivity extends Activity implements SubscriptionsView
                     convertView = inflater.inflate(R.layout.podcasts_listview_item, parent, false);
                 }
                 TextView title = convertView.findViewById(R.id.podcast_title);
-                title.setText(subscriptions.get(position).getTitle());
+                title.setText(subscriptions.get(position).title);
                 return convertView;
             }
         });

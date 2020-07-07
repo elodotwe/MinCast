@@ -150,6 +150,14 @@ public class PodcastModel {
 
     // TODO: I don't like that this returns null, but I dislike exceptions even more at the moment.
     private ParseResult parseFromUrl(String url) {
+        // Clean up any existing cache. Some crappy apps let their cache directory grow until the
+        // user goes and cleans it up manually. Not us.
+        // TODO: this makes us not threadsafe. Don't particularly care just now.
+        for (File file : appContext.getCacheDir().listFiles()) {
+            //noinspection ResultOfMethodCallIgnored
+            file.delete();
+        }
+
         File destination;
         try {
             // Local temp file will be in the cache directory, named after the base64 conversion
@@ -163,8 +171,7 @@ public class PodcastModel {
             destination = new File(appContext.getCacheDir(),
                     Base64.encodeToString(url.getBytes("utf8"), Base64.DEFAULT));
         } catch (UnsupportedEncodingException e) {
-            Log.e(TAG, "getSubscriptionFromURL: couldn't encode URL as base64", e);
-            return null;
+            throw new RuntimeException("Couldn't encode URL to base64 oddly enough", e);
         }
 
         try {
@@ -188,6 +195,9 @@ public class PodcastModel {
             //TODO how to manage cached file cleanup...some sort of RAII thing?
             return null;
         }
+        // Clean up the downloaded RSS file as we'll never use it again. Don't care if the deletion fails.
+        //noinspection ResultOfMethodCallIgnored
+        destination.delete();
         Log.i(TAG, "run: result was " + result);
         return result;
     }

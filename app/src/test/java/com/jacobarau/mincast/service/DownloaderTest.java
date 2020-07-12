@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-@RunWith(RobolectricTestRunner.class)
+//@RunWith(RobolectricTestRunner.class)
 public class DownloaderTest {
     // Commented out to keep me from hitting this URL every time I run tests. The downloader seems to work at the moment.
 //    @Test

@@ -6,6 +6,7 @@ import android.util.Xml;
 import com.jacobarau.mincast.subscription.Item;
 import com.jacobarau.mincast.subscription.Subscription;
 
+import org.jetbrains.annotations.NotNull;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -19,9 +20,9 @@ public class RssParser {
     private static String TAG = RssParser.class.getSimpleName();
 
     //TODO more robust unhappy path handling
-    public ParseResult parseRSS(InputStream inputStream, String encoding) throws XmlPullParserException, IOException, ParseException {
+    public ParseResult parseRSS(InputStream inputStream, String encoding, @NotNull String url) throws XmlPullParserException, IOException, ParseException {
         ParseResult result = new ParseResult();
-        Subscription subscription = new Subscription();
+        Subscription subscription = new Subscription(url);
         result.subscription = subscription;
         result.items = new ArrayList<>();
         XmlPullParser parser = Xml.newPullParser();

@@ -1,31 +1,48 @@
 package com.jacobarau.mincast.subscription;
 
+import android.annotation.SuppressLint;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Date;
+import java.util.Objects;
 
 public class Subscription {
     /**
+     * Database ID of this Subscription, or null if not previously saved in the database.
+     */
+    @Nullable
+    public Long id;
+
+    /**
      * URL of the RSS feed associated with this subscription.
      */
+    @NotNull
     public String url;
 
     /**
      * Title of this subscription, from the RSS feed.
      */
+    @Nullable
     public String title;
 
     /**
      * Link to the feed's website, from the RSS.
      */
+    @Nullable
     public String link;
 
     /**
      * Phrase/sentence describing the feed, from the RSS.
      */
+    @Nullable
     public String description;
 
     /**
      * If present in the RSS, a URL to an associated image.
      */
+    @Nullable
     public String imageUrl;
 
     /**
@@ -35,13 +52,15 @@ public class Subscription {
      * It can be null if, for instance, a feed was just added--the new subscription will be added to
      * the database before we've fetched the RSS and filled out any fields yet.
      */
+    @Nullable
     public Date lastUpdated;
 
-    @SuppressWarnings("NullableProblems")
+    @NotNull
     @Override
     public String toString() {
         return "Subscription{" +
-                "url='" + url + '\'' +
+                "id=" + id +
+                ", url='" + url + '\'' +
                 ", title='" + title + '\'' +
                 ", link='" + link + '\'' +
                 ", description='" + description + '\'' +
@@ -50,31 +69,28 @@ public class Subscription {
                 '}';
     }
 
+    @SuppressLint("NewApi")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Subscription that = (Subscription) o;
-
-        if (url != null ? !url.equals(that.url) : that.url != null) return false;
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        if (link != null ? !link.equals(that.link) : that.link != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null)
-            return false;
-        if (imageUrl != null ? !imageUrl.equals(that.imageUrl) : that.imageUrl != null)
-            return false;
-        return lastUpdated != null ? lastUpdated.equals(that.lastUpdated) : that.lastUpdated == null;
+        return Objects.equals(id, that.id) &&
+                url.equals(that.url) &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(link, that.link) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(imageUrl, that.imageUrl) &&
+                Objects.equals(lastUpdated, that.lastUpdated);
     }
 
+    @SuppressLint("NewApi")
     @Override
     public int hashCode() {
-        int result = url != null ? url.hashCode() : 0;
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (link != null ? link.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (imageUrl != null ? imageUrl.hashCode() : 0);
-        result = 31 * result + (lastUpdated != null ? lastUpdated.hashCode() : 0);
-        return result;
+        return Objects.hash(id, url, title, link, description, imageUrl, lastUpdated);
+    }
+
+    public Subscription(@NotNull String url) {
+        this.url = url;
     }
 }

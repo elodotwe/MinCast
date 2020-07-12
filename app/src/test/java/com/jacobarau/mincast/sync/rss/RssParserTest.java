@@ -14,7 +14,6 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
@@ -38,7 +37,7 @@ public class RssParserTest {
 
         InputStream istream = this.getClass().getResourceAsStream("/cst.xml");
 
-        ParseResult result = parser.parseRSS(istream, "UTF-8");
+        ParseResult result = parser.parseRSS(istream, "UTF-8", "a url");
 
         assertEquals(2, result.items.size());
         Item item0 = result.items.get(0);

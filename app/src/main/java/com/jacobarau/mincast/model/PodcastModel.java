@@ -99,15 +99,14 @@ public class PodcastModel {
     }
 
     public void subscribeTo(String url) {
-        final Subscription subscription = new Subscription();
-        subscription.url = url;
+        final Subscription subscription = new Subscription(url);
         subscription.lastUpdated = new Date();
         subscription.title = url;
 
         dbExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                podcastDatabase.addSubscription(subscription);
+                podcastDatabase.save(subscription);
                 updateSubscriptionList();
             }
         });
@@ -189,7 +188,7 @@ public class PodcastModel {
         RssParser parser = new RssParser();
         ParseResult result;
         try {
-            result = parser.parseRSS(new FileInputStream(destination), "utf-8");
+            result = parser.parseRSS(new FileInputStream(destination), "utf-8", url);
         } catch (XmlPullParserException | IOException | ParseException e) {
             Log.e(TAG, "getSubscriptionFromURL: Error parsing downloaded file", e);
             //TODO how to manage cached file cleanup...some sort of RAII thing?
@@ -230,7 +229,7 @@ public class PodcastModel {
                         dbExecutor.submit(new Runnable() {
                             @Override
                             public void run() {
-                                podcastDatabase.updateSubscription(subscription);
+                                podcastDatabase.save(subscription);
                                 //TODO ooooohhhh hacky as shit
                                 updateSubscriptionList();
                             }
